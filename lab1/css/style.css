@@ -1,7 +1,71 @@
 blockquote {
-	padding: 10.5px 21px;
-	margin: 0px 0px 21px;
-	font-size: 18.75px;
-	font-family: consolas;
-	border-left: 5px solid #ECF0F1;
+	margin-bottom: 10px;
+	padding: 10px;
+	background-color: #fff9e3;
+	border-left: 2px solid #ffeb8e;
+}
+
+body {
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+img {
+	height: auto;
+}
+
+.banner {
+	text-align: center;
+}
+
+.banner h1 {
+	padding-top: 35px;
+	padding-bottom: 35px;
+	font-family: 
+}
+
+.banner img {
+	position: absolute;
+	right: 0;
+	height: auto;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+}
+
+.story {
+	position: relative;
+}
+
+.story .home, .river, .garden, .lib {
+	color: red;
+}
+
+.story table {
+	padding-top: 10px;
+	position: absolute;
+	left: 500px;
+}
+
+.story table tr,td {
+	border: 1px solid black;
+	border-collapse: collapse;
+	padding: 10px
+}
+
+.story .leftNav {
+	padding-top: 70px;
+	position: absolute;
+	left: 0;
+}
+
+.story .rightNav {
+	padding-top: 70px;
+	position: absolute;
+	right: 0;
 }
