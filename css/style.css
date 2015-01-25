@@ -1,0 +1,14 @@
+body {
+  padding-left: 40px;
+  padding-right: 40px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#monmonLogo {
+	height:auto;
+	width:70px;
+}

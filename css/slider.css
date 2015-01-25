@@ -1,0 +1,69 @@
+#cssSlider {
+   width: 1000px;
+   height: 500px;
+   overflow: hidden;
+   position: relative;
+   margin: 0 auto;
+}
+#cssSlider figure {
+   width: 1000px;
+   height: 500;
+   margin: 0;
+   position: absolute;
+   top: 0;
+   left: -1000px;
+   z-index: 1;
+   transition: all linear 0.5s;
+   -o-transition: all linear 0.5s;
+   -moz-transition: all linear 0.5s;
+   -webkit-transition: all linear 0.5s;
+}
+#cssSlider figure:target {
+   left: 0;
+}
+#cssSlider figure:first-child {
+   left: 0;
+}
+#cssSlider figure figcaption {
+   position: absolute;
+   font-family: Arial, Verdana, Helvetica, sans-serif;
+   font-size: 13px;
+   bottom: 0;
+   right: 1000px;
+   z-index: 2;
+   color: #fff;
+   padding: 10px 20px;
+   width: 960px;
+   background-image: -webkit-linear-gradient(left, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.498039) 30%, rgba(0, 0, 0, 0) 100%);
+   transition: all linear 1s;
+   -o-transition: all linear 1s;
+   -moz-transition: all linear 1s;
+   -webkit-transition: all linear 1s;
+   opacity: 0;
+}
+#cssSlider figure:target figcaption {
+   right: 0;
+   opacity: 1;
+}
+#sliderPagination {
+   position: absolute;
+   right: 10px;
+   bottom: 8px;
+   z-index: 10;
+}
+#sliderPagination a {
+   text-decoration: none;
+   background: rgba(255,255,255,0.5);
+   padding: 4px 8px;
+   color: #333;
+   border-radius: 20px;
+   transition: all linear 0.5s;
+   -o-transition: all linear 0.5s;
+   -moz-transition: all linear 0.5s;
+   -webkit-transition: all linear 0.5s;
+}
+#sliderPagination a:hover {
+   background: #fff;
+   color: #666;
+   width: auto;
+}
