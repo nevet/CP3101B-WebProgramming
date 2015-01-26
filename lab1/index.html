@@ -6,69 +6,26 @@
     </title>
     <link href="css/style.css" type="text/css" rel="stylesheet"/>
     <link href="img/two cats.png" type="image/png" rel="shortcut icon">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="js/misc.js"></script>
+    <script src="js/smooth-scroll.js"></script>
   </head>
   <body>
     <section class="banner">
-      <img src="img/cat.png" width="150">
-      <h1>The Runaway Cat</h1>
+      <p>The Runaway Cat</p>
+      <img src="img/footprint.png" id="footprint"/>
+      <img src="img/standing cat.png" class="flipped" id="standing-cat"/>
     </section>
-    <hr>
-    <section>
-      <h2> The Background </h2>
-      <p>The classic children book <a href="http://en.wikipedia.org/wiki/The_Runaway_Bunny" target="_blank">"The RUNAWAY BUNNY"</a> by Margeret Wise Brown and Pictures by Clement Hurd that has extremely simple plot (it is a children book after all):</p>
-      <blockquote>
-       A small rabbit wants to run away but his mother tells him that "if you run away, I will run after you..."
-      </blockquote>
-      <p>But our version is a bit different, instead of bunny, it's CAT in our version :) You can navigate the story by clicking left and right arrows.</p>
-    </section>
-    <hr>
-    <section class="story">
-      <h2>Prelude</h2>
-      <p>They stay in one of the cell in the grid - their <span class="home">home</span>, labeled as H in the grid.There are lots of obstacles (at least 4 cells) in the 2D grid world, labeled as # in the grid. The <em>small cat</em> wants to explore this 2D grid world with his <em>mother cat</em>.</p>
-      <div class="container">
-        <img class="leftNav" width="150" src="img/left.png">
-        <table>
-          <th colspan="5">
-            Cats World 
-          </th>
-          <tr>
-            <td>#</td>
-            <td>#</td>
-            <td>#</td>
-            <td>#</td>
-            <td>#</td>
-          </tr>
-          <tr>
-            <td>#</td>
-            <td>#</td>
-            <td>R</td>
-            <td>#</td>
-            <td>#</td>
-          </tr>
-          <tr>
-            <td>#</td>
-            <td>#</td>
-            <td>H</td>
-            <td>#</td>
-            <td>#</td>
-          </tr>
-          <tr>
-            <td>#</td>
-            <td>#</td>
-            <td>L</td>
-            <td>#</td>
-            <td>#</td>
-          </tr>
-          <tr>
-            <td>#</td>
-            <td>#</td>
-            <td>#</td>
-            <td>G</td>
-            <td>#</td>
-          </tr>
-        </table>
-        <a href="2.html"><img class="rightNav" width="150" src="img/right.png"></a>
-      </div>
-    </section>
+    <hr id="bannerSplitter">
+    <div id="top">
+      <p>hahah?</p>
+    </div>
+    <div id="viewStory">
+      <a href="#story">View Story</a><img src="img/carrot.png" id="carrot">
+    </div>
+    <div id="story">
+      <h1 style="padding-top: 10px;">Prelude</h1>
+    </div>
   </body>
 </html>

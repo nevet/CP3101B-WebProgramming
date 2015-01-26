@@ -1,32 +1,25 @@
 blockquote {
-	margin-bottom: 10px;
-	padding: 10px;
-	background-color: #fff9e3;
-	border-left: 2px solid #ffeb8e;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fff9e3;
+    border-left: 2px solid #ffeb8e;
 }
 
 body {
-	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: georgia, sans-serif;
 }
 
 img {
-	height: auto;
+    height: auto;
 }
 
-.banner {
-	text-align: center;
-}
-
-.banner h1 {
-	padding-top: 35px;
-	padding-bottom: 35px;
-	font-family: 
-}
-
-.banner img {
-	position: absolute;
-	right: 0;
-	height: auto;
+img.flipped {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
 }
 
 hr {
@@ -38,34 +31,89 @@ hr {
     background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
 }
 
-.story {
-	position: relative;
+section.banner {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    width: 600px;
+    height: 150px;
 }
 
-.story .home, .river, .garden, .lib {
-	color: red;
+div#top {
+    position: relative;
+    height: 100%;
+    min-height: 400px;
+    margin: 0 auto;
+    width: 882px;
+    padding: 0 54px;
 }
 
-.story table {
-	padding-top: 10px;
-	position: absolute;
-	left: 500px;
+div#viewStory {
+    width: 1260px;
+    position: absolute;
+    text-align: center;
 }
 
-.story table tr,td {
-	border: 1px solid black;
-	border-collapse: collapse;
-	padding: 10px
+div#story {
+    position: relative;
+    height: 100%;
+    min-height: 670px;
+    margin: 0 auto;
+    width: 882px;
+    padding: 0 54px;
 }
 
-.story .leftNav {
-	padding-top: 70px;
-	position: absolute;
-	left: 0;
+#viewStory a {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 17px;
+    color: #91a8ba;
 }
 
-.story .rightNav {
-	padding-top: 70px;
-	position: absolute;
-	right: 0;
+.banner p {
+    position: absolute;
+    font: italic normal 1.4em georgia, sans-serif;
+    font-size: 70px;
+    letter-spacing: 1px;
+    color: #000;
+    text-shadow: 5px 5px 10px grey;
+    left: 340px;
+    z-index: 5;
+
+    -webkit-animation: fadeIn 1s ease-in;
+    -webkit-animation-timing-function: linear;
+    animation: fadeIn 1s ease-in;
+    animation-timing-function: linear;
+}
+
+#footprint {
+    width: 500px;
+    margin-left: 250px;
+    margin-top: 30px;
+    z-index: 1;
+}
+
+#standing-cat {
+    position: relative;
+    left: 428px;
+    bottom: 88px;
+}
+
+#bannerSplitter {
+    margin-top: 50px;
+}
+
+#carrot {
+    padding-left: 10px;
+    width: 12px;
+}
+
+@-webkit-keyframes fadeIn {
+    from {left: 390px; opacity: 0;}
+    to {left: 340px; opacity: 1;}
+}
+
+@keyframes fadeIn {
+    from {left: 390px; opacity: 0;}
+    to {left: 340px; opacity: 1;}
 }

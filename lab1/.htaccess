@@ -1,4 +1,4 @@
 AuthType Basic
 AuthName "My Lab TA, please enter 'TA' (CAPITAL) as the User Name and the Password that I will tell you separately"
-AuthUserFile "/home/<your_dir>/public_html/lab1/passwd"
+AuthUserFile "/home/huangda/public_html/lab1/passwd"
 Require user TA
