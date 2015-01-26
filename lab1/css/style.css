@@ -14,6 +14,10 @@ a {
     color: #91a8ba;
 }
 
+p {
+    line-height: 30px;
+}
+
 img {
     height: auto;
 }
@@ -36,72 +40,20 @@ hr {
     background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
 }
 
+h1, h2 {
+    text-align: center;
+}
+
+span {
+    color: red;
+}
+
 section.banner {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
     width: 600px;
     height: 150px;
-}
-
-#top {
-    position: relative;
-    height: 100%;
-    min-height: 450px;
-    margin: 0 auto;
-    width: 882px;
-    padding: 0 54px;
-}
-
-#top p {
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-
-#viewStory {
-    width: 1260px;
-    position: absolute;
-    text-align: center;
-}
-
-#story {
-    position: relative;
-    height: 100%;
-    min-height: 700px;
-    margin: 0 auto;
-    width: 882px;
-    padding: 0 54px;
-}
-
-#viewStory a {
-    display: inline-block;
-    font-size: 17px;
-}
-
-.banner p {
-    position: absolute;
-    font: italic normal 1.4em georgia, sans-serif;
-    font-size: 70px;
-    letter-spacing: 1px;
-    color: #000;
-    text-shadow: 5px 5px 10px grey;
-    left: 340px;
-    z-index: 5;
-
-    -webkit-animation: fadeIn 1s ease-in;
-    -webkit-animation-timing-function: linear;
-    animation: fadeIn 1s ease-in;
-    animation-timing-function: linear;
-}
-
-.book {
-    font-style: italic;
-}
-
-.verticalHolder {
-    display: table-cell;
-    vertical-align: middle;
-    height: 450px;
 }
 
 #footprint {
@@ -126,12 +78,173 @@ section.banner {
     width: 12px;
 }
 
-@-webkit-keyframes fadeIn {
+#top {
+    position: relative;
+    height: 100%;
+    min-height: 450px;
+    margin: 0 auto;
+    width: 882px;
+    padding: 0 54px;
+}
+
+#story {
+    position: relative;
+    height: 100%;
+    min-height: 400px;
+    margin: 0 auto;
+    width: 882px;
+    padding: 0 54px;
+}
+
+#storyCap {
+    position: relative;
+    height: 100%;
+    min-height: 215px;
+    margin: 0 auto;
+    width: 882px;
+    padding: 0 54px;
+}
+
+#storyBg {
+    height: 450px;
+}
+
+#storyMap {
+    height: 370px;
+}
+
+#top p {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#bgContent {
+    padding: 0 90px;
+    font-size: 18px;
+}
+
+#viewStory {
+    width: 1260px;
+    position: absolute;
+    text-align: center;
+}
+
+#viewStory a {
+    display: inline-block;
+    font-size: 17px;
+}
+
+#story h1 {
+    padding-top: 30px;
+}
+
+#storyHolder {
+    margin-left: auto;
+    margin-right: auto;
+    width: 882px;
+}
+
+#navLeft, #navRight {
+    position: absolute;
+    top: 231px;
+
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+
+#navLeft:hover, #navRight:hover {
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+#navLeft {
+    left: 0;
+}
+
+#navRight {
+    right: 0;
+}
+
+#map {
+    width: 300px;
+    height: 300px;
+    table-layout: fixed;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#map, tr, td {
+    border: 4px solid;
+    border-color: black;
+    border-collapse: collapse;
+}
+
+#cellHome {
+    font-weight: bold;
+    color: red;
+}
+
+#storyCap p {
+    padding: 0 175px;
+    font-size: 20px;
+}
+
+.banner p {
+    position: absolute;
+    font: italic normal 1.4em georgia, sans-serif;
+    font-size: 70px;
+    letter-spacing: 1px;
+    color: #000;
+    text-shadow: 5px 5px 10px grey;
+    left: 340px;
+    z-index: 5;
+
+    -webkit-animation: fadeFlyIn 1s ease-in;
+    -webkit-animation-timing-function: linear;
+    animation: fadeFlyIn 1s ease-in;
+    animation-timing-function: linear;
+}
+
+.book {
+    font-style: italic;
+}
+
+.verticalHolder {
+    display: table-cell;
+    vertical-align: middle;
+    width: 882px;
+}
+
+@-webkit-keyframes fadeFlyIn {
     from {left: 390px; opacity: 0;}
     to {left: 340px; opacity: 1;}
 }
 
-@keyframes fadeIn {
+@keyframes fadeFlyIn {
     from {left: 390px; opacity: 0;}
     to {left: 340px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-webkit-keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+
+@keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
 }
