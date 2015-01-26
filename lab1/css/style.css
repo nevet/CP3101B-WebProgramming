@@ -9,6 +9,11 @@ body {
     font-family: georgia, sans-serif;
 }
 
+a {
+    text-decoration: none;
+    color: #91a8ba;
+}
+
 img {
     height: auto;
 }
@@ -39,25 +44,30 @@ section.banner {
     height: 150px;
 }
 
-div#top {
+#top {
     position: relative;
     height: 100%;
-    min-height: 400px;
+    min-height: 450px;
     margin: 0 auto;
     width: 882px;
     padding: 0 54px;
 }
 
-div#viewStory {
+#top p {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#viewStory {
     width: 1260px;
     position: absolute;
     text-align: center;
 }
 
-div#story {
+#story {
     position: relative;
     height: 100%;
-    min-height: 670px;
+    min-height: 700px;
     margin: 0 auto;
     width: 882px;
     padding: 0 54px;
@@ -65,9 +75,7 @@ div#story {
 
 #viewStory a {
     display: inline-block;
-    text-decoration: none;
     font-size: 17px;
-    color: #91a8ba;
 }
 
 .banner p {
@@ -84,6 +92,16 @@ div#story {
     -webkit-animation-timing-function: linear;
     animation: fadeIn 1s ease-in;
     animation-timing-function: linear;
+}
+
+.book {
+    font-style: italic;
+}
+
+.verticalHolder {
+    display: table-cell;
+    vertical-align: middle;
+    height: 450px;
 }
 
 #footprint {
