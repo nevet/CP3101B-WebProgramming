@@ -6,4 +6,4 @@ The course consists of 7 labs on different toics + a term project. I will host a
 
 # Lab 1
 
-This lab talks about basic `HTML5`, `CSS3` and some simple `JavaScript`. The live demo is [here](cp3101b.comp.nus.edu.sg/~huangda/lab1).
+This lab talks about basic `HTML5`, `CSS3` and some simple `JavaScript`. The live demo is [here](http://cp3101b.comp.nus.edu.sg/~huangda/lab1).
