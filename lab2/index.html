@@ -3,9 +3,29 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="shortcut icon" type="image/jpg" href="img/favicon.jpg">
+    <link rel="shortcut icon" type="image/png" href="img/standing-cat.png">
     <title>The Runaway Cat - Puzzle</title>
   </head>
   <body>
+    <div class="container">
+      <div class="banner round-border">
+        <div id="icon"></div>
+        <span class="banner-text" id="title">Runaway Cat Puzzle</span>
+        <span class="banner-text" id="subtitle">Can you beat it?</span>
+      </div>
+      <div class="panel">
+        <table>
+          <tr><td r="1" c="1">H</td><td r="1" c="2">.</td><td r="1" c="3">G</td><td r="1" c="4">.</td><td r="1" c="5">.</td></tr>
+          <tr><td r="2" c="1">.</td><td r="2" c="2">.</td><td r="2" c="3">.</td><td r="2" c="4">#</td><td r="2" c="5">.</td></tr>
+          <tr><td r="3" c="1">.</td><td r="3" c="2">R</td><td r="3" c="3">.</td><td r="3" c="4">.</td><td r="3" c="5">L</td></tr>
+          <tr><td r="4" c="1">.</td><td r="4" c="2">.</td><td r="4" c="3">.</td><td r="4" c="4">.</td><td r="4" c="5">#</td></tr>
+          <tr><td r="5" c="1">#</td><td r="5" c="2">.</td><td r="5" c="3">.</td><td r="5" c="4">.</td><td r="5" c="5">#</td></tr>
+        </table>
+        <div class="control-panel">
+          <span>Count: <span id="step-count">0</span></span>
+        </div>
+      </div>
+    </div>
+    <script src="js/find-path.js"></script>
   </body>
 </html>
