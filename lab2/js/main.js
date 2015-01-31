@@ -1,4 +1,5 @@
 window.beforeHoverBg = "rgb(0, 0, 0)";
+window.stepCount = 0;
 
 function rgbSum(c1, c2) {
   var a = c1.a + c2.a * (1 - c1.a);
@@ -35,8 +36,13 @@ $(function () {
   })
 
   $('td').on("click", function () {
+    beforeHoverBg = "rgb(255, 0, 0)";
+    stepCount ++;
+    
     $(this).css({
-      "background": "red"
+      "background": beforeHoverBg
     });
+
+    $('#step-count').text(stepCount);
   });
 });
