@@ -24,10 +24,6 @@ table,td,tr {
     border-collapse: collapse;
 }
 
-td:hover {
-	background: pink;
-}
-
 .container {
 	width: 1200px;
 	margin: auto;
