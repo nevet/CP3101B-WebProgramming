@@ -16,6 +16,9 @@ table {
 	width: 450px;
 	height: 450px;
 	text-align: center;
+	font-size: 40px;
+	color: orange;
+	text-shadow: 1px 1px 4px #A08675;
 	table-layout: fixed;
 }
 
@@ -65,8 +68,11 @@ table,td,tr {
 }
 
 .control-panel {
-	padding-top: 50px;
 	font-size: 30px;
+}
+
+.control-panel p {
+	line-height: 15px;
 }
 
 #icon {
@@ -86,6 +92,23 @@ table,td,tr {
 	position: relative;
 	top: 30px;
 	font-size: 20px;
+}
+
+#instruction {
+	text-align: center;
+}
+
+#instruction.error {
+	color: red;
+}
+
+#instruction.success {
+	color: green;
+}
+
+#indicator {
+	color: orange;
+	text-shadow: 1px 1px 4px #A08675;
 }
 
 @-webkit-keyframes fadeLeftFlyIn {

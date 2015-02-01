@@ -1,10 +1,15 @@
 window.beforeHoverBg = "rgb(0, 0, 0)";
 window.stepCount = 0;
 window.bestCount = 0;
-window.origraph = [[], [], [], [], []];
-window.vis = [[], [], [], [], []];
+window.bestPathCount = 0;
 window.si = 0;
 window.sj = 0;
+window.gameState = 0;
+
+window.origraph = [[], [], [], [], []];
+window.vis = [[], [], [], [], []];
+window.path = [[], [], [], [], []];
+window.bestPath = [];
 
 window.di = [-1, 0, 1, 0];
 window.dj = [0, 1, 0, -1];
@@ -26,7 +31,18 @@ function genColor(r, g, b) {
 }
 
 function verify(cell) {
-  if (cell.text() == '#') return "Error: On obstacle!";
+  if (cell.text() == '#') return 'Error: On obstacle!';
+
+  switch (gameState) {
+    case 0:
+      break;
+    case 1:
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+  }
   
   return "Success";
 }
@@ -98,6 +114,8 @@ function dfs(i, j, step, cur)
   if (step == 4)
   {
     if (cur < bestCount) bestCount = cur;
+    bestPath.push(path);
+    bestPathCount ++;
 
     return;
   }
@@ -110,6 +128,7 @@ function dfs(i, j, step, cur)
     if (valid(ni, nj, step))
     {
       vis[ni][nj] = true;
+      path[ni][nj] = (d + 2) % 4;
       // printf("%d %d %d %d\n", ni, nj, step, cur);
 
       if (origraph[ni][nj] != 30)
@@ -129,9 +148,11 @@ $(function () {
   init();
 
   bestCount = 50;
+  path[0][0] = -1;
   dfs(si, sj, 0, 0);
 
   console.log('best step is ' + bestCount);
+  console.log('best path count is ' + bestPath.length);
 
   $('td').hover(function () {
     beforeHoverBg = $(this).css("background");
@@ -148,17 +169,22 @@ $(function () {
 
   $('td').on("click", function () {
     var cell = $(this);
+    var instruction = $('#instruction');
     var msg = verify(cell);
+
+    instruction.removeClass('success error');
+    instruction.html(msg);
     
     if (msg.indexOf('Error') == -1) {
       stepCount ++;
+      $('#instruction').addClass('success');
       if (cell.text() != '.') {
         cell.text(cell.text() + '/' + stepCount);
       } else {
         cell.text(stepCount);
       }
     } else {
-      alert(msg);
+      $('#instruction').addClass('error');
       return;
     }
 
