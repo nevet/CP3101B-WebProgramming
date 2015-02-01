@@ -390,14 +390,30 @@ $(function () {
   });
 
   $('#hint').hover(function () {
-    console.log('in');
     $('.hintpanel').css({
-      'z-index': 10
-    })
+      'z-index': 10,
+    });
+
+    $('.hintpanel').addClass('ani-fadeIn');
+
+    $('.hintpanel').on("webkitAnimationEnd oanimationend msAnimationEnd animationend", function (e) {
+      $('.hintpanel').css({
+        'opacity': 0.5,
+        'z-index': 10
+      });
+
+      $(this).removeClass('ani-fadeIn');
+    });
   }, function () {
-    console.log('out');
-    $('.hintpanel').css({
-      'z-index': -1
+    $('.hintpanel').addClass('ani-fadeOut');
+
+    $('.hintpanel').on("webkitAnimationEnd oanimationend msAnimationEnd animationend", function (e) {
+      $('.hintpanel').css({
+        'z-index': -1,
+        'opacity': 0
+      });
+
+      $(this).removeClass('ani-fadeOut');
     });
   });
 });

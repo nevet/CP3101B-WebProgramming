@@ -83,6 +83,20 @@ table,td,tr {
 	line-height: 15px;
 }
 
+.ani-fadeIn {
+	-webkit-animation: fadeIn 0.25s ease-in;
+    -webkit-animation-timing-function: linear;
+    animation: fadeIn 0.25s ease-in;
+    animation-timing-function: linear;
+}
+
+.ani-fadeOut {
+	-webkit-animation: fadeOut 0.25s ease-in;
+    -webkit-animation-timing-function: linear;
+    animation: fadeOut 0.25s ease-in;
+    animation-timing-function: linear;
+}
+
 #icon {
 	background: url(../img/standing-cat.png);
 	width: 60px;
@@ -143,4 +157,24 @@ table,td,tr {
 @keyframes fadeRightFlyIn {
     from {right: 30px; opacity: 0;}
     to {right: 0px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 0.5;}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 0.5;}
+}
+
+@-webkit-keyframes fadeOut {
+    from {opacity: 0.5;}
+    to {opacity: 0;}
+}
+
+@keyframes fadeOut {
+    from {opacity: 0.5;}
+    to {opacity: 0;}
 }
