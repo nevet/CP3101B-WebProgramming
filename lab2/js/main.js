@@ -10,7 +10,7 @@ window.gameState = 0;
 window.origraph = [[], [], [], [], []];
 window.vis = [[], [], [], [], []];
 window.path = [[], [], [], [], []];
-window.bestPath = [];
+window.bestPath = [[], [], [], [], []];
 window.lastClick = {"r": -1, "c": -1};
 
 window.di = [-1, 0, 1, 0];
@@ -21,7 +21,8 @@ window.map = ['H', 'R', 'G', 'L', '.', '#'];
 var lightBrown = "rgb(86, 51, 36)";
 var darkBrown = "rgb(52, 34, 34)";
 var red = "rgb(255, 0, 0)";
-var table = $('table')[0];
+var table = $('#play-table')[0];
+var hintTable = $('#hint-table')[0];
 var styledName = ['<span id="indicator">H</span>ome', '<span id="indicator">R</span>iver', '<span id="indicator">G</span>arden', '<span id="indicator">L</span>ibrary'];
 var scoreString = ['Perfect play!', 'Good enough!', 'Can be more efficient!', 'Have another try!'];
 
@@ -130,8 +131,6 @@ function setCellStatus(cell, highlight) {
       }
     }
   }
-
-  console.log(lastClick);
 }
 
 function getScore() {
@@ -263,35 +262,36 @@ function valid(i, j, step)
   return true;
 }
 
+function clone(path) {
+  for (var i = 0; i < 5; i ++)
+    for (var j = 0; j < 5; j ++)
+      bestPath[i][j] = path[i][j];
+}
+
 function dfs(i, j, step, cur)
 {
-  if (cur + dist(i, j, si, sj) >= bestCount) return;
+  if (cur + dist(i, j, si, sj) >= bestCount) return false;
 
-  if (step == 4)
-  {
-    if (cur < bestCount) bestCount = cur;
-    bestPath.push(path);
-    bestPathCount ++;
+  if (step == 4) {
+    if (cur < bestCount) {
+      bestCount = cur;
+      clone(path);
+    }
 
     return;
   }
 
-  for (var d = 0; d < 4; d ++)
-  {
+  for (var d = 0; d < 4; d ++) {
     var ni = i + di[d];
     var nj = j + dj[d];
 
-    if (valid(ni, nj, step))
-    {
+    if (valid(ni, nj, step)) {
       vis[ni][nj] = true;
       path[ni][nj] = (d + 2) % 4;
-      // printf("%d %d %d %d\n", ni, nj, step, cur);
 
-      if (origraph[ni][nj] != 4)
-      {
+      if (origraph[ni][nj] != 4) {
         dfs(ni, nj, step + 1, cur + 1);
-      } else
-      {
+      } else {
         dfs(ni, nj, step, cur + 1);
       }
 
@@ -300,18 +300,44 @@ function dfs(i, j, step, cur)
   }
 }
 
+function printPath(i, j, cur) {
+  if (cur == 0) return;
+
+  var cell = $(hintTable.rows[i].cells[j]);
+
+  if (origraph[i][j] < 4) {
+    cell.text(cell.text() + '/' + cur);
+  } else {
+    cell.text(cur);
+  }
+
+  cell.css({
+    'background': red
+  });
+
+  var d = bestPath[i][j];
+  var ndi = di[d];
+  var ndj = dj[d];
+
+  printPath(i + ndi, j + ndj, cur - 1);
+}
+
 $(function () {
   init();
 
   bestCount = 50;
   path[0][0] = -1;
   dfs(si, sj, 0, 0);
+  console.log(bestPath);
+  var bdi = di[bestPath[si][sj]];
+  var bdj = dj[bestPath[si][sj]];
+  printPath(si + bdi, sj + bdj, bestCount);
   bestCount ++;
 
   console.log('best step is ' + bestCount);
   console.log('best path count is ' + bestPath.length);
 
-  $('td').hover(function () {
+  $('#play-table td').hover(function () {
     beforeHoverBg = $(this).css("background");
     var rgb = beforeHoverBg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+)\))?/);
 
@@ -324,7 +350,7 @@ $(function () {
     });
   })
 
-  $('td').on("click", function () {
+  $('#play-table td').on("click", function () {
     var cell = $(this);
     var instruction = $('#instruction');
     instruction.removeClass('success error');
@@ -361,5 +387,17 @@ $(function () {
       init();
       instruction.html(setGameState(0));
     }
+  });
+
+  $('#hint').hover(function () {
+    console.log('in');
+    $('.hintpanel').css({
+      'z-index': 10
+    })
+  }, function () {
+    console.log('out');
+    $('.hintpanel').css({
+      'z-index': -1
+    });
   });
 });
