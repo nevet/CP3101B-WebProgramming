@@ -1,3 +1,4 @@
+// all comments will be deleted after release for better performance
 window.beforeHoverBg = "rgb(0, 0, 0)";
 window.stepCount = 0;
 window.bestCount = 0;
@@ -10,9 +11,12 @@ window.origraph = [[], [], [], [], []];
 window.vis = [[], [], [], [], []];
 window.path = [[], [], [], [], []];
 window.bestPath = [];
+window.lastClick = {"r": -1, "c": -1};
 
 window.di = [-1, 0, 1, 0];
 window.dj = [0, 1, 0, -1];
+
+window.map = ['H', 'R', 'G', 'L', '.', '#'];
 
 var lightBrown = "rgb(86, 51, 36)";
 var darkBrown = "rgb(52, 34, 34)";
@@ -30,18 +34,121 @@ function genColor(r, g, b) {
           "b": parseInt(b, 10)};
 }
 
+function clickOnAdjcent(cell) {
+  var r = parseInt(cell.attr('r'), 10);
+  var c = parseInt(cell.attr('c'), 10);
+
+  return lastClick.r == -1 || dist(r, c, lastClick.r, lastClick.c) < 2;
+}
+
+function clickOnVisited(cell) {
+  var visited = cell.text().match('/^(?:[HRGL]\/)?(\d+)$/');
+
+  return visited != null ? parseInt(visited[1], 10) : -1;
+}
+
+function recoverCell(cell) {
+  var r = parseInt(cell.attr('r'), 10) - 1;
+  var c = parseInt(cell.attr('c'), 10) - 1;
+
+  cell.text(map[origraph[r][c]]);
+  cell.css({
+    "background": (r + c) % 2 == 0 ? lightBrown : darkBrown
+  });
+
+  stepCount --;
+}
+
 function verify(cell) {
   if (cell.text() == '#') return 'Error: On obstacle!';
 
+  // if user clicks on some non-adjacent cell, invalid 
+  if (!clickOnAdjcent(cell)) return 'Error: Cats cannot fly!';
+
+  // else, we have 3 cases:
+  // 1. he clicks on some visited cell
+  //  1.1 that cell is where he comes
+  //  1.2 that cell is a cell on the path
+  // 2. a new adjacent cell
+
+  var cellStepCount = clickOnVisited(cell);
+
+  if (cellStepCount == stepCount) {
+    // case 1.1
+    recoverCell(cell);
+    return '';
+  } else
+  if (cellStepCount != -1) {
+    // case 1.2
+    return 'Error: Cats cannot visit any non-home cell twice!';
+  }
+
+  // case 2
   switch (gameState) {
     case 0:
+      // we just started the game, we can only click on 'H'
+      if (cell.text() != 'H') {
+        return 'Error: We should start from <span id="indicator">H</span>ome';
+      } else {
+        gameState = 1;
+        return 'Good start! We are now heading to <span id="indicator">R</span>iver!';
+      }
       break;
     case 1:
+      // we are heading to 'R'
+      if (cell.text() == 'R') {
+        gameState = 2;
+
+        return 'Good job! We are now heading to <span id="indicator">G</span>arden!';
+      } else {
+        if (cell.text() == '.') {
+          return 'Moving towards <span id="indicator">R</span>iver!';
+        }
+
+        return 'Error: We should visit <span id="indicator">R</span>iver first!';
+      }
       break;
     case 2:
+      // we are heading to 'G'
+      if (cell.text() == 'G') {
+        gameState = 3;
+
+        return 'Well done! We are now heading to <span id="indicator">L</span>ibrary!';
+      } else {
+        if (cell.text() == '.') {
+          return 'Moving towards <span id="indicator">G</span>arden!';
+        }
+
+        return 'Error: We should visit <span id="indicator">G</span>arden first!';
+      }
       break;
     case 3:
+      // we are heading to 'L'
+      if (cell.text() == 'L') {
+        gameState = 4;
+
+        return 'Almost there! We are now heading <span id="indicator">H</span>ome!';
+      } else {
+        if (cell.text() == '.') {
+          return 'Moving towards <span id="indicator">L</span>ibrary!';
+        }
+
+        return 'Error: We should visit <span id="indicator">L</span>ibrary first!';
+      }
       break;
+    case 4:
+      // we are heading to 'H' {
+      if (cell.text() == 'H/1') {
+        gameState = 0;
+
+        alert('You have completed in ' + stepCount + ' moves!' + getScore());
+      } else {
+        if (cell.text()) {
+          return 'Moving towards <span id="indicator">H</span>ome!';
+        }
+
+        return 'Error: We should visit <span id="indicator">H</span>ome!';
+      }
   }
   
   return "Success";
@@ -60,10 +167,10 @@ function init() {
 
       switch (cell.text()) {
         case '.':
-          origraph[i][j] = 30;
+          origraph[i][j] = 4;
           break;
         case '#':
-          origraph[i][j] = 40;
+          origraph[i][j] = 5;
           break;
         case 'H':
           origraph[i][j] = 0;
@@ -100,9 +207,9 @@ function inside(i, j)
 
 function valid(i, j, step)
 {
-  if (!inside(i, j) || vis[i][j] || origraph[i][j] == 40) return false;
+  if (!inside(i, j) || vis[i][j] || origraph[i][j] == 5) return false;
 
-  if (origraph[i][j] < 5 && origraph[i][j] != (step + 1) % 4) return false;
+  if (origraph[i][j] < 4 && origraph[i][j] != (step + 1) % 4) return false;
 
   return true;
 }
@@ -131,7 +238,7 @@ function dfs(i, j, step, cur)
       path[ni][nj] = (d + 2) % 4;
       // printf("%d %d %d %d\n", ni, nj, step, cur);
 
-      if (origraph[ni][nj] != 30)
+      if (origraph[ni][nj] != 4)
       {
         dfs(ni, nj, step + 1, cur + 1);
       } else
@@ -170,13 +277,21 @@ $(function () {
   $('td').on("click", function () {
     var cell = $(this);
     var instruction = $('#instruction');
+    instruction.removeClass('success error');
+
     var msg = verify(cell);
 
-    instruction.removeClass('success error');
-    instruction.html(msg);
+    if (msg.length) {
+      instruction.html(msg);
+    } else {
+      $('#step-count').text(stepCount);
+      return;
+    }
     
     if (msg.indexOf('Error') == -1) {
       stepCount ++;
+      lastClick = {"r": parseInt(cell.attr('r')), "c": parseInt(cell.attr('c'))};
+
       $('#instruction').addClass('success');
       if (cell.text() != '.') {
         cell.text(cell.text() + '/' + stepCount);
