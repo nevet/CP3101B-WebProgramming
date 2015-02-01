@@ -22,7 +22,8 @@ var lightBrown = "rgb(86, 51, 36)";
 var darkBrown = "rgb(52, 34, 34)";
 var red = "rgb(255, 0, 0)";
 var table = $('table')[0];
-var styledName = ['<span id="indicator">H</span>ome', '<span id="indicator">R</span>iver!', '<span id="indicator">G</span>arden', '<span id="indicator">L</span>ibrary'];
+var styledName = ['<span id="indicator">H</span>ome', '<span id="indicator">R</span>iver', '<span id="indicator">G</span>arden', '<span id="indicator">L</span>ibrary'];
+var scoreString = ['Perfect play!', 'Good enough!', 'Can be more efficient!', 'Have another try!'];
 
 function rgbSum(c1, c2) {
   var output = "rgb(" + Math.floor((c1.r + c2.r) / 2) + ", " + Math.floor((c1.g + c2.g) / 2) + ", " + Math.floor((c1.b + c2.b) / 2) + ")";
@@ -35,6 +36,24 @@ function genColor(r, g, b) {
           "b": parseInt(b, 10)};
 }
 
+function abs(a) {
+  return a < 0 ? -a : a;
+}
+
+function dist(i1, j1, i2, j2) {
+  return abs(i1 - i2) + abs(j1 - j2);
+}
+
+function inside(i, j) {
+  return i >= 0 && i < 5 && j >= 0 && j < 5;
+}
+
+function getCellClickCount(cell) {
+  var text = cell.text();
+  var count = text.match(/^(?:[HRGL]\/)?(\d+)$/);
+  return count != null ? parseInt(count[1], 10) : -1;
+}
+
 function clickOnAdjcent(cell) {
   var r = parseInt(cell.attr('r'), 10);
   var c = parseInt(cell.attr('c'), 10);
@@ -43,10 +62,7 @@ function clickOnAdjcent(cell) {
 }
 
 function clickOnVisited(cell) {
-  var cellText = cell.text();
-  var visited = cellText.match(/^(?:[HRGL]\/)?(\d+)$/);
-
-  return visited != null ? parseInt(visited[1], 10) : -1;
+  return getCellClickCount(cell);
 }
 
 function setGameState(state) {
@@ -70,7 +86,7 @@ function setInstruction(cell) {
   var instruction = $('#instruction');
 
   if (cell.text() == '.') {
-    instruction.html('Moving towards ' + styledName[gameState]);
+    instruction.html('Moving towards ' + styledName[gameState] + '!');
   } else {
     instruction.html(setGameState(gameState));
   }
@@ -81,7 +97,7 @@ function setStepCount(count) {
   $('#step-count').text(stepCount);
 }
 
-function switchCellStatus(cell, highlight) {
+function setCellStatus(cell, highlight) {
   var r = parseInt(cell.attr('r'), 10) - 1;
   var c = parseInt(cell.attr('c'), 10) - 1;
   beforeHoverBg = highlight ? red : ((r + c) % 2 == 0 ? lightBrown : darkBrown);
@@ -100,7 +116,30 @@ function switchCellStatus(cell, highlight) {
     cell.text(map[origraph[r][c]]);
   }
 
-  lastClick = {'r': r + 1, 'c': c + 1};
+  if (highlight) {
+    lastClick = {'r': r + 1, 'c': c + 1};
+  } else {
+    for (var d = 0; d < 4; d ++) {
+      var nr = r + di[d];
+      var nc = c + dj[d];
+
+      if (inside(nr, nc) && getCellClickCount($(table.rows[nr].cells[nc])) == stepCount - 1) {
+        lastClick = {'r': nr + 1, 'c': nc + 1};
+
+        break;
+      }
+    }
+  }
+
+  console.log(lastClick);
+}
+
+function getScore() {
+  if (stepCount == bestCount) return scoreString[0];
+  if (stepCount - bestCount < 3) return scoreString[1];
+  if (stepCount - bestCount < 5) return scoreString[2];
+
+  return '';
 }
 
 function verify(cell) {
@@ -114,7 +153,9 @@ function verify(cell) {
     return {'status': 'undo', 'msg': ''};
   } else
   if (cellStepCount != -1) {
-    return {'status': 'err', 'msg': 'Cats cannot walk across their path!'};
+    if (gameState != 4 || cellStepCount != 1) {
+      return {'status': 'err', 'msg': 'Cats cannot walk across their path!'};
+    }
   }
 
   switch (gameState) {
@@ -165,9 +206,7 @@ function verify(cell) {
     case 4:
       // we are heading to 'H'
       if (cell.text() == 'H/1') {
-        gameState = 0;
-
-        alert('You have completed in ' + stepCount + ' moves!' + getScore());
+        return {'status': 'fin', 'msg': ''};
       } else {
         if (cell.text()) {
           return {'status': 'ok', 'msg': 'Moving towards <span id="indicator">H</span>ome!'};
@@ -183,13 +222,9 @@ function verify(cell) {
 function init() {
   for (var i = 0; i < 5; i ++)
     for (var j = 0; j < 5; j ++) {
-      var color = (i + j) % 2 == 0 ? lightBrown : darkBrown;
       var cell = $(table.rows[i].cells[j]);
+      setCellStatus(cell, false);
       vis[i][j] = false;
-      
-      cell.css({
-        "background": color
-      });
 
       switch (cell.text()) {
         case '.':
@@ -214,21 +249,9 @@ function init() {
           break;
       }
     }
-}
 
-function abs(a)
-{
-  return a < 0 ? -a : a;
-}
-
-function dist(i1, j1, i2, j2)
-{
-  return abs(i1 - i2) + abs(j1 - j2);
-}
-
-function inside(i, j)
-{
-  return i >= 0 && i < 5 && j >= 0 && j < 5;
+  setStepCount(0);
+  lastClick = {'r': -1, 'c': -1};
 }
 
 function valid(i, j, step)
@@ -283,6 +306,7 @@ $(function () {
   bestCount = 50;
   path[0][0] = -1;
   dfs(si, sj, 0, 0);
+  bestCount ++;
 
   console.log('best step is ' + bestCount);
   console.log('best path count is ' + bestPath.length);
@@ -316,10 +340,10 @@ $(function () {
       instruction.html(msg.msg);
 
       setStepCount(stepCount + 1);
-      switchCellStatus(cell, true);
+      setCellStatus(cell, true);
     } else
     if (msg.status == 'undo') {
-      switchCellStatus(cell, false);
+      setCellStatus(cell, false);
       setStepCount(stepCount - 1);
       
       if (origraph[cell.attr('r') - 1][cell.attr('c') - 1] < 4) {
@@ -327,6 +351,15 @@ $(function () {
       }
 
       setInstruction(cell);
+    } else
+    if (msg.status == 'fin') {
+      setStepCount(stepCount + 1);
+      instruction.html('Congratulations!');
+      
+      alert('You have completed in ' + stepCount + ' moves!\n' + getScore());
+
+      init();
+      instruction.html(setGameState(0));
     }
   });
 });
