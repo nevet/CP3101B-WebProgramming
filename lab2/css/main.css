@@ -63,14 +63,15 @@ table,td,tr {
 }
 
 .panel {
+	position: relative;
 	width: 650px;
 	padding-top: 20px;
 }
 
 .hintpanel {
 	position: absolute;
-	top: 112px;
-	left: 415px;
+	top: 20px;
+	left: calc(50% - 225px);
 	z-index: -1;
 	opacity: 0;
 }
@@ -135,7 +136,7 @@ table,td,tr {
 
 #hint {
 	position: absolute;
-	right: 300px;
+	right: 10px;
 	color: red;
 }
 
@@ -161,20 +162,20 @@ table,td,tr {
 
 @-webkit-keyframes fadeIn {
     from {opacity: 0;}
-    to {opacity: 0.5;}
+    to {opacity: 1;}
 }
 
 @keyframes fadeIn {
     from {opacity: 0;}
-    to {opacity: 0.5;}
+    to {opacity: 1;}
 }
 
 @-webkit-keyframes fadeOut {
-    from {opacity: 0.5;}
+    from {opacity: 1;}
     to {opacity: 0;}
 }
 
 @keyframes fadeOut {
-    from {opacity: 0.5;}
+    from {opacity: 1;}
     to {opacity: 0;}
 }
