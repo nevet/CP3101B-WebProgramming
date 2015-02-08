@@ -1,8 +1,11 @@
 (function (view, $, undefined) {
   var table = $('#play-table')[0];
   var hintTable = $('#hint-table')[0];
+
   var styledName = ['<span id="indicator">H</span>ome', '<span id="indicator">R</span>iver', '<span id="indicator">G</span>arden', '<span id="indicator">L</span>ibrary'];
   var scoreString = ['Perfect play!', 'Good enough!', 'Can be more efficient!', 'Have another try!'];
+
+  var beforeHoverBg;
 
   function printPath(i, j, cur) {
     if (cur == 0) return;
@@ -41,7 +44,7 @@
 
         view.setCellText(cell, graph.interprete(graph.map[i][j]));
       }
-      
+
     var solution = graph.solution;
 
     console.log(solution);
@@ -60,6 +63,20 @@
         view.setCellText(cell, graph.interprete(graph.map[i][j]));
         view.setCellColor(cell, (i + j) % 2 == 0 ? utils.lightBrown : utils.darkBrown);
       }
+  }
+
+  view.mouseInCell = function () {
+    var cell = $(this);
+    beforeHoverBg = view.getCellColor(cell);
+    var rgb = beforeHoverBg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+)\))?/);
+    var blended = utils.rgbSum(utils.genColor(255, 192, 203), utils.genColor(rgb[1], rgb[2], rgb[3]));
+
+    view.setCellColor(cell, blended);
+  }
+
+  view.mouseOutCell = function () {
+    var cell = $(this);
+    view.setCellColor(cell, beforeHoverBg);
   }
 
   view.showSolution = function () {
