@@ -2,101 +2,9 @@
 (function () {
   var beforeHoverBg = "rgb(0, 0, 0)";
   var stepCount = 0;
-  var bestCount = 0;
-  var bestPathCount = 0;
-  var si = 0;
-  var sj = 0;
   var gameState = 0;
 
-  var di = [-1, 0, 1, 0];
-  var dj = [0, 1, 0, -1];
-
-  var map = ['H', 'R', 'G', 'L', '.', '#'];
-  var origraph = [[], [], [], [], []];
-  var vis = [[], [], [], [], []];
-  var path = [[], [], [], [], []];
-  var bestPath = [[], [], [], [], []];
   var lastClick = {"r": -1, "c": -1};
-
-  var lightBrown = "rgb(86, 51, 36)";
-  var darkBrown = "rgb(52, 34, 34)";
-  var red = "rgb(255, 0, 0)";
-  var table = $('#play-table')[0];
-  var hintTable = $('#hint-table')[0];
-  var styledName = ['<span id="indicator">H</span>ome', '<span id="indicator">R</span>iver', '<span id="indicator">G</span>arden', '<span id="indicator">L</span>ibrary'];
-  var scoreString = ['Perfect play!', 'Good enough!', 'Can be more efficient!', 'Have another try!'];
-
-  var solver = new function() {
-    var valid = function (i, j, step)
-    {
-      if (!inside(i, j) || vis[i][j] || origraph[i][j] == 5) return false;
-
-      if (origraph[i][j] < 4 && origraph[i][j] != (step + 1) % 4) return false;
-
-      return true;
-    }
-
-    var clone = function(path) {
-      for (var i = 0; i < 5; i ++)
-        for (var j = 0; j < 5; j ++)
-          bestPath[i][j] = path[i][j];
-    }
-
-    this.run = function(i, j, step, cur)
-    {
-      if (cur + dist(i, j, si, sj) >= bestCount) return false;
-
-      if (step == 4) {
-        if (cur < bestCount) {
-          bestCount = cur;
-          clone(path);
-        }
-
-        return;
-      }
-
-      for (var d = 0; d < 4; d ++) {
-        var ni = i + di[d];
-        var nj = j + dj[d];
-
-        if (valid(ni, nj, step)) {
-          vis[ni][nj] = true;
-          path[ni][nj] = (d + 2) % 4;
-
-          if (origraph[ni][nj] != 4) {
-            this.run(ni, nj, step + 1, cur + 1);
-          } else {
-            this.run(ni, nj, step, cur + 1);
-          }
-
-          vis[ni][nj] = false;
-        }
-      }
-    }
-  }
-
-  function rgbSum(c1, c2) {
-    var output = "rgb(" + Math.floor((c1.r + c2.r) / 2) + ", " + Math.floor((c1.g + c2.g) / 2) + ", " + Math.floor((c1.b + c2.b) / 2) + ")";
-    return output;
-  }
-
-  function genColor(r, g, b) {
-    return {"r": parseInt(r, 10),
-            "g": parseInt(g, 10),
-            "b": parseInt(b, 10)};
-  }
-
-  function abs(a) {
-    return a < 0 ? -a : a;
-  }
-
-  function dist(i1, j1, i2, j2) {
-    return abs(i1 - i2) + abs(j1 - j2);
-  }
-
-  function inside(i, j) {
-    return i >= 0 && i < 5 && j >= 0 && j < 5;
-  }
 
   function getCellClickCount(cell) {
     var text = cell.text();
@@ -268,72 +176,16 @@
   }
 
   function init() {
-    for (var i = 0; i < 5; i ++)
-      for (var j = 0; j < 5; j ++) {
-        var cell = $(table.rows[i].cells[j]);
-        setCellStatus(cell, false);
-        vis[i][j] = false;
-
-        switch (cell.text()) {
-          case '.':
-            origraph[i][j] = 4;
-            break;
-          case '#':
-            origraph[i][j] = 5;
-            break;
-          case 'H':
-            origraph[i][j] = 0;
-            si = i;
-            sj = j;
-            break;
-          case 'R':
-            origraph[i][j] = 1;
-            break;
-          case 'G':
-            origraph[i][j] = 2;
-            break;
-          case 'L':
-            origraph[i][j] = 3;
-            break;
-        }
-      }
-
+    
     setStepCount(0);
     lastClick = {'r': -1, 'c': -1};
-  }
-
-  function printPath(i, j, cur) {
-    if (cur == 0) return;
-
-    var cell = $(hintTable.rows[i].cells[j]);
-
-    if (origraph[i][j] < 4) {
-      cell.text(cell.text() + '/' + cur);
-    } else {
-      cell.text(cur);
-    }
-
-    cell.css({
-      'background': red
-    });
-
-    var d = bestPath[i][j];
-    var ndi = di[d];
-    var ndj = dj[d];
-
-    printPath(i + ndi, j + ndj, cur - 1);
   }
 
   $(function () {
     init();
 
-    bestCount = 50;
-    path[0][0] = -1;
-    solver.run(si, sj, 0, 0);
     console.log(bestPath);
-    var bdi = di[bestPath[si][sj]];
-    var bdj = dj[bestPath[si][sj]];
-    printPath(si + bdi, sj + bdj, bestCount);
+    
     bestCount ++;
 
     console.log('best step is ' + bestCount);
