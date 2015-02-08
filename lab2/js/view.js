@@ -4,23 +4,14 @@
   var styledName = ['<span id="indicator">H</span>ome', '<span id="indicator">R</span>iver', '<span id="indicator">G</span>arden', '<span id="indicator">L</span>ibrary'];
   var scoreString = ['Perfect play!', 'Good enough!', 'Can be more efficient!', 'Have another try!'];
 
-  function setCellColor(cell, color) {
-    cell.css({
-      'background': color
-    });
-  }
-
-  function setCellText(cell, text) {
-    cell.text(text);
-  }
-
   function printPath(i, j, cur) {
     if (cur == 0) return;
 
     var cell = $(hintTable.rows[i].cells[j]);
+    var text = graph.interprete(graph.map[i][j]);
 
-    setCellText(cell, graph.map[i][j] < 4 ? cell.text() + '/' + cur : cur);
-    setCellColor(cell, utils.red);
+    view.setCellText(cell, graph.map[i][j] < 4 ? text + '/' + cur : cur);
+    view.setCellColor(cell, utils.red);
 
     var d = graph.solution[i][j];
     var ndi = utils.di[d];
@@ -29,8 +20,31 @@
     printPath(i + ndi, j + ndj, cur - 1);
   }
 
+  view.setCellColor = function (cell, color) {
+    cell.css({
+      'background': color
+    });
+  }
+
+  view.getCellColor = function (cell) {
+    return cell.css('background');
+  }
+
+  view.setCellText = function (cell, text) {
+    cell.text(text);
+  }
+
   view.renderSolution = function () {
+    for (var i = 0; i < 5; i ++)
+      for (var j = 0; j < 5; j ++) {
+        var cell = $(hintTable.rows[i].cells[j]);
+
+        view.setCellText(cell, graph.interprete(graph.map[i][j]));
+      }
+      
     var solution = graph.solution;
+
+    console.log(solution);
 
     var bdi = utils.di[solution[graph.startPosR][graph.startPosC]];
     var bdj = utils.dj[solution[graph.startPosR][graph.startPosC]];
@@ -43,8 +57,38 @@
       for (var j = 0; j < 5; j ++) {
         var cell = $(table.rows[i].cells[j]);
 
-        setCellText(cell, graph.interprete(graph.map[i][j]));
-        setCellColor(cell, (i + j) % 2 == 0 ? utils.lightBrown : utils.darkBrown);
+        view.setCellText(cell, graph.interprete(graph.map[i][j]));
+        view.setCellColor(cell, (i + j) % 2 == 0 ? utils.lightBrown : utils.darkBrown);
       }
+  }
+
+  view.showSolution = function () {
+    $('.hintpanel').css({
+      'z-index': 10,
+    });
+
+    $('.hintpanel').addClass('ani-fadeIn');
+
+    $('.hintpanel').on("webkitAnimationEnd oanimationend msAnimationEnd animationend", function (e) {
+      $('.hintpanel').css({
+        'opacity': 1,
+        'z-index': 10
+      });
+
+      $(this).removeClass('ani-fadeIn');
+    });
+  }
+
+  view.hideSolution = function () {
+    $('.hintpanel').addClass('ani-fadeOut');
+
+    $('.hintpanel').on("webkitAnimationEnd oanimationend msAnimationEnd animationend", function (e) {
+      $('.hintpanel').css({
+        'z-index': -1,
+        'opacity': 0
+      });
+
+      $(this).removeClass('ani-fadeOut');
+    });
   }
 } (window.view = window.view || {}, jQuery));

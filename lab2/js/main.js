@@ -184,25 +184,7 @@
   $(function () {
     init();
 
-    console.log(bestPath);
     
-    bestCount ++;
-
-    console.log('best step is ' + bestCount);
-    console.log('best path count is ' + bestPath.length);
-
-    $('#play-table td').hover(function () {
-      beforeHoverBg = $(this).css("background");
-      var rgb = beforeHoverBg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+)\))?/);
-
-      $(this).css({
-        "background": rgbSum(genColor(255, 192, 203), genColor(rgb[1], rgb[2], rgb[3]))
-      });
-    }, function () {
-      $(this).css({
-        "background": beforeHoverBg
-      });
-    })
 
     $('#play-table td').on("click", function () {
       var cell = $(this);
@@ -241,34 +223,6 @@
         init();
         instruction.html(setGameState(0));
       }
-    });
-
-    $('#hint').hover(function () {
-      $('.hintpanel').css({
-        'z-index': 10,
-      });
-
-      $('.hintpanel').addClass('ani-fadeIn');
-
-      $('.hintpanel').on("webkitAnimationEnd oanimationend msAnimationEnd animationend", function (e) {
-        $('.hintpanel').css({
-          'opacity': 1,
-          'z-index': 10
-        });
-
-        $(this).removeClass('ani-fadeIn');
-      });
-    }, function () {
-      $('.hintpanel').addClass('ani-fadeOut');
-
-      $('.hintpanel').on("webkitAnimationEnd oanimationend msAnimationEnd animationend", function (e) {
-        $('.hintpanel').css({
-          'z-index': -1,
-          'opacity': 0
-        });
-
-        $(this).removeClass('ani-fadeOut');
-      });
     });
   });
 })();
