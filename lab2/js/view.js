@@ -1,6 +1,8 @@
 (function (view, $, undefined) {
   var table = $('#play-table')[0];
   var hintTable = $('#hint-table')[0];
+  var instruction = $('#instruction');
+  var stepCount = $('#step-count');
 
   var styledName = ['<span id="indicator">H</span>ome', '<span id="indicator">R</span>iver', '<span id="indicator">G</span>arden', '<span id="indicator">L</span>ibrary'];
   var scoreString = ['Perfect play!', 'Good enough!', 'Can be more efficient!', 'Have another try!'];
@@ -23,10 +25,45 @@
     printPath(i + ndi, j + ndj, cur - 1);
   }
 
+  function onCheckPoint(state) {
+    switch (state) {
+    case 0:
+      return 'Start from <span id="indicator">H</span>ome :)';
+    case 1:
+      return 'Good start! We are now heading to <span id="indicator">R</span>iver!';
+    case 2:
+      return 'Good job! We are now heading to <span id="indicator">G</span>arden!';
+    case 3:
+      return 'Well done! We are now heading to <span id="indicator">L</span>ibrary!';
+    case 4:
+      return 'Almost there! We are now heading <span id="indicator">H</span>ome!';
+    }
+  }
+
+  function getInstruction(pos, state) {
+    if (graph.map[pos.r][pos.c] == 4) {
+      return 'Moving towards ' + styledName[state] + '!';
+    }
+    
+    return onCheckPoint(state);
+  }
+
+  function getScore() {
+    if (stepCount == bestCount) return scoreString[0];
+    if (stepCount - bestCount < 3) return scoreString[1];
+    if (stepCount - bestCount < 5) return scoreString[2];
+
+    return '';
+  }
+
   view.setCellColor = function (cell, color) {
     cell.css({
       'background': color
     });
+  }
+
+  view.getCell = function (pos) {
+    return $(table.rows[pos.r].cells[pos.c]);
   }
 
   view.getCellColor = function (cell) {
@@ -35,6 +72,37 @@
 
   view.setCellText = function (cell, text) {
     cell.text(text);
+  }
+
+  view.resetCell = function (cell) {
+    var r = parseInt(cell.attr('r')) - 1;
+    var c = parseInt(cell.attr('c')) - 1;
+
+    view.setCellText(cell, graph.interprete(graph.map[i][j]));
+    view.setCellColor(cell, (r + c) % 2 == 0 ? utils.lightBrown : utils.darkBrown);
+  }
+
+  view.highlightCell = function (cell, curStep) {
+    var r = parseInt(cell.attr('r')) - 1;
+    var c = parseInt(cell.attr('c')) - 1;
+    var text = graph.interprete(graph.map[i][j]);
+
+    setCellColor(cell, utils.red);
+    setCellText(cell, graph.map[r][c] < 4 ? text + '/' + curStep : curStep);
+  }
+
+  view.setInstruction = function (html, classType) {
+    instruction.removeClass('success error');
+    
+    if (classType != '') {
+      instruction.addClass(classType);
+    }
+
+    instruction.html(html);
+  }
+
+  view.setStepCount = function (count) {
+    stepCount.text(count);
   }
 
   view.renderSolution = function () {
@@ -60,8 +128,7 @@
       for (var j = 0; j < 5; j ++) {
         var cell = $(table.rows[i].cells[j]);
 
-        view.setCellText(cell, graph.interprete(graph.map[i][j]));
-        view.setCellColor(cell, (i + j) % 2 == 0 ? utils.lightBrown : utils.darkBrown);
+        resetCell(cell);
       }
   }
 
@@ -107,5 +174,38 @@
 
       $(this).removeClass('ani-fadeOut');
     });
+  }
+
+  view.resetPath = function () {
+    view.renderMap();
+  }
+
+  view.updateMove = function (moveInfo, pos) {
+    var cell = getCell(pos);
+
+    switch (moveInfo.status) {
+      case 'err':
+        setInstruction(moveInfo.msg, 'error');
+        break;
+      case 'undo':
+        resetCell(cell);
+        setInstruction(getInstruction(moveInfo.prevPos), '');
+        setStepCount(moveInfo.curStep);
+        break;
+      case 'ok':
+        highlightCell(cell, moveInfo.curStep);
+        setInstruction(getInstruction(pos), 'success');
+        setStepCount(moveInfo.curStep);
+        break;
+      case 'fin':
+        setInstruction('Congratulations!', 'success');
+        setStepCount(moveInfo.curStep);
+        $('html').trigger('reloadPlayground');
+        break;
+    }
+  }
+
+  view.congratInfo = function () {
+    alert('You have completed in ' + stepCount + ' moves!\n' + getScore());
   }
 } (window.view = window.view || {}, jQuery));
