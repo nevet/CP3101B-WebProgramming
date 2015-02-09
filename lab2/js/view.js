@@ -7,8 +7,6 @@
   var styledName = ['<span id="indicator">R</span>iver', '<span id="indicator">G</span>arden', '<span id="indicator">L</span>ibrary', '<span id="indicator">H</span>ome'];
   var scoreString = ['Perfect play!', 'Good enough!', 'Can be more efficient!', 'Have another try!'];
 
-  var beforeHoverBg;
-
   function printPath(i, j, cur) {
     if (cur == 0) return;
 
@@ -75,11 +73,10 @@
   view.resetCell = function (cell) {
     var r = parseInt(cell.attr('r')) - 1;
     var c = parseInt(cell.attr('c')) - 1;
-
-    beforeHoverBg = (r + c) % 2 == 0 ? utils.lightBrown : utils.darkBrown;
+    var color = (r + c) % 2 == 0 ? utils.lightBrown : utils.darkBrown;
 
     view.setCellText(cell, graph.interprete(graph.map[r][c]));
-    view.setCellColor(cell, beforeHoverBg);
+    view.setCellColor(cell, color);
   }
 
   view.highlightCell = function (cell, curStep) {
@@ -89,8 +86,6 @@
 
     view.setCellColor(cell, utils.red);
     view.setCellText(cell, graph.map[r][c] < 4 ? text + '/' + curStep : curStep);
-
-    beforeHoverBg = utils.red;
   }
 
   view.setInstruction = function (html, classType) {
@@ -134,8 +129,7 @@
 
   view.mouseInCell = function () {
     var cell = $(this);
-    beforeHoverBg = view.getCellColor(cell);
-    var rgb = beforeHoverBg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+)\))?/);
+    var rgb = view.getCellColor(cell).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+)\))?/);
     var blended = utils.rgbSum(utils.genColor(255, 192, 203), utils.genColor(rgb[1], rgb[2], rgb[3]));
 
     view.setCellColor(cell, blended);
@@ -143,7 +137,12 @@
 
   view.mouseOutCell = function () {
     var cell = $(this);
-    view.setCellColor(cell, beforeHoverBg);
+    var r = parseInt(cell.attr('r')) - 1;
+    var c = parseInt(cell.attr('c')) - 1;
+
+    var color = path.chosen({'r': r, 'c': c}) ? utils.red : (r + c) % 2 == 0 ? utils.lightBrown : utils.darkBrown;
+
+    view.setCellColor(cell, color);
   }
 
   view.showSolution = function () {

@@ -39,6 +39,10 @@
     view.updateMove({'status': 'ok', 'curStep': curStep, 'state': state}, lastPos);
   }
 
+  path.chosen = function (position) {
+    return path.walk[position.r][position.c] != -1 || (position.r == graph.startPosR && position.c == graph.startPosC);
+  }
+
   path.tryPlace = function (position) {
     var r = position.r;
     var c = position.c;
