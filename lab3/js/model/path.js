@@ -5,14 +5,14 @@
 
   path.walk = [[], [], [], [], []];
 
-  function onAdjcent(position) {
+  function clickOnAdjcent(position) {
     if (lastPos.r == -1) return true;
 
     return utils.dist(position.r, position.c, lastPos.r, lastPos.c) < 2;
   }
 
   function getDirection(position) {
-    if (!onAdjcent(position)) return -1;
+    if (!clickOnAdjcent(position)) return -1;
 
     var dr = position.r - lastPos.r;
     var dc = position.c - lastPos.c;
@@ -37,6 +37,10 @@
     lastPos = {'r': graph.startPosR, 'c': graph.startPosC};
 
     view.updateMove({'status': 'ok', 'curStep': curStep, 'state': state}, lastPos);
+  }
+
+  path.chosen = function (position) {
+    return path.walk[position.r][position.c] != -1 || (position.r == graph.startPosR && position.c == graph.startPosC);
   }
 
   path.tryPlace = function (position) {
