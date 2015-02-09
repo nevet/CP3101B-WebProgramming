@@ -29,6 +29,12 @@
     return {'r': position.r - utils.di[d], 'c': position.c - utils.dj[d]};
   }
 
+  function earlyReach(position) {
+    var cur = graph.map[position.r][position.c];
+
+    return cur < 4 && cur != (state + 1) % 4;
+  }
+
   path.init = function () {
     view.resetPath();
     utils.fillArray(path.walk, -1);
@@ -80,6 +86,9 @@
       } else
       if(path.walk[r][c] != -1) {
         moveInfo = {'status': 'err', 'msg': 'Cannot walk across the path!'};
+      }  else
+      if (earlyReach(position)) {
+        moveInfo = {'status': 'err', 'msg': 'Reach here too early!'};
       } else {
         curStep ++;
 
