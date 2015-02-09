@@ -39,6 +39,8 @@
   }
 
   graph.init = function () {
+    graph.bestCount = -1;
+
     while (graph.bestCount < 0 || graph.bestCount > 25) {
       utils.fillArray(graph.map, 4);
 

@@ -46,10 +46,10 @@
     return onCheckPoint(state);
   }
 
-  function getScore() {
-    if (stepCount == bestCount) return scoreString[0];
-    if (stepCount - bestCount < 3) return scoreString[1];
-    if (stepCount - bestCount < 5) return scoreString[2];
+  function getScore(count) {
+    if (count == graph.bestCount + 1) return scoreString[0];
+    if (count - graph.bestCount < 4) return scoreString[1];
+    if (count - graph.bestCount < 6) return scoreString[2];
 
     return '';
   }
@@ -116,8 +116,6 @@
       }
 
     var solution = graph.solution;
-
-    console.log(solution);
 
     var bdi = utils.di[solution[graph.startPosR][graph.startPosC]];
     var bdj = utils.dj[solution[graph.startPosR][graph.startPosC]];
@@ -202,12 +200,12 @@
       case 'fin':
         view.setInstruction('Congratulations!', 'success');
         view.setStepCount(moveInfo.curStep);
-        $('html').trigger('reloadPlayground');
+        $('html').trigger('reloadPlayground', [moveInfo.curStep]);
         break;
     }
   }
 
-  view.congratInfo = function () {
-    alert('You have completed in ' + stepCount + ' moves!\n' + getScore());
+  view.congratInfo = function (count) {
+    alert('You have completed in ' + count + ' moves!\n' + getScore(count));
   }
 } (window.view = window.view || {}, jQuery));

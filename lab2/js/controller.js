@@ -17,8 +17,8 @@
 
     $('#hint').hover(view.showSolution, view.hideSolution);
 
-    $('html').on('reloadPlayground', function () {
-      view.congratInfo();
+    $('html').on('reloadPlayground', function (event, stepCount) {
+      view.congratInfo(stepCount);
       init();
     });
 
