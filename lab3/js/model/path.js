@@ -2,6 +2,7 @@
   var curStep = 0;
   var state = 0;
   var lastPos = {'r': -1, 'c': -1};
+  var pathStep = [[], [], [], [], []];
 
   path.walk = [[], [], [], [], []];
 
@@ -33,6 +34,7 @@
     utils.fillArray(path.walk, -1);
 
     curStep = 1;
+    pathStep[graph.startPosR][graph.startPosC] = 1;
     state = 0;
     lastPos = {'r': graph.startPosR, 'c': graph.startPosC};
 
@@ -41,6 +43,10 @@
 
   path.chosen = function (position) {
     return path.walk[position.r][position.c] != -1 || (position.r == graph.startPosR && position.c == graph.startPosC);
+  }
+
+  path.getStep = function (position) {
+    return pathStep[position.r][position.c];
   }
 
   path.tryPlace = function (position) {
@@ -85,6 +91,7 @@
           }
 
           path.walk[r][c] = direction;
+          pathStep[r][c] = curStep;
           moveInfo = {'status': 'ok', 'curStep': curStep, 'state': state};
           lastPos = position;
         }

@@ -100,11 +100,26 @@
   }
 
   view.mouseInCell = function (cell) {
-    view.setCellColor(cell, utils.hoverColor);
+    var pos = {'r': cell.r + 1, 'c': cell.c + 1};
+
+    view.setCellColor(pos, utils.hoverColor);
+
+    if (path.chosen(cell)) {
+      view.setCellText(pos, path.getStep(cell));
+    }
   }
 
   view.mouseOutCell = function (cell) {
-    view.setCellColor(cell, utils.normalColor);
+    if (cell.r == -1) return;
+
+    var pos = {'r': cell.r + 1, 'c': cell.c + 1};
+
+    view.resetCell(pos);
+
+    if (path.chosen(cell)) {
+      view.setCellColor(pos, utils.clickedColor);
+      view.setCellText(pos, path.getStep(cell));
+    }
   }
 
   view.showSolution = function () {

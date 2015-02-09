@@ -1,5 +1,6 @@
 (function (controller, $, undefined) {
   var gameState = 0;
+  var lastCell = {'r': -1, 'c': -1};
 
   function init() {
     graph.init();
@@ -15,7 +16,7 @@
     };
   }
 
-  function getClickedCell(event) {
+  function getCellUnderMouse(event) {
     mousePos = getMousePosition(event);
 
     return {'r': parseInt(mousePos.y / 96), 'c': parseInt(mousePos.x / 96)};
@@ -24,9 +25,18 @@
   $(function () {
     init();
 
-    // $('#play-table td').hover(view.mouseInCell, view.mouseOutCell);
-
     $('#hint').hover(view.showSolution, view.hideSolution);
+
+    $('#play-table').mousemove(function () {
+      var cell = getCellUnderMouse(event);
+
+      if (lastCell.r != cell.r || lastCell.c != cell.c) {
+        view.mouseInCell(cell);
+        view.mouseOutCell(lastCell);
+
+        lastCell = cell;
+      }
+    });
 
     $('html').on('reloadPlayground', function (event, stepCount) {
       view.congratInfo(stepCount);
@@ -34,7 +44,7 @@
     });
 
     $('#play-table').on("click", function () {
-      var cell = getClickedCell(event);
+      var cell = getCellUnderMouse(event);
       path.tryPlace(cell);
     });
   });
