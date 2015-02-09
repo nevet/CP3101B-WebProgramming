@@ -11,3 +11,11 @@ This lab talks about basic `HTML5`, `CSS3` and some simple `JavaScript`. The lab
 ## Lab 2
 
 This lab talks about more on `JavaScript`. The lab requires to develop an online puzzle game interface. In short, the puzzle contains multiple checkpoints that must be visited in a certain order, and all cells except the starting cell must be visited by at most once, while the starting cell must be visited twice. The live demo is [here](http://cp3101b.comp.nus.edu.sg/~huangda/lab2).
+
+**Update**
+
+Lab 2 has been revamped to MVC architecture, and more OOP design.
+
+## Lab 3
+
+This lab talks about `HTML5 canvas`. The lab requires to upgrade the puzzle interface in Lab 2 to a canvas. The live demo is [here](http://cp3101b.comp.nus.edu.sg/~huangda/lab3).
