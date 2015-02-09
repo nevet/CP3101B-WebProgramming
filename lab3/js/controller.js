@@ -26,7 +26,7 @@
 
     // $('#play-table td').hover(view.mouseInCell, view.mouseOutCell);
 
-    // $('#hint').hover(view.showSolution, view.hideSolution);
+    $('#hint').hover(view.showSolution, view.hideSolution);
 
     $('html').on('reloadPlayground', function (event, stepCount) {
       view.congratInfo(stepCount);

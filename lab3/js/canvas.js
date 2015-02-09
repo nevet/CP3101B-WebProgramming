@@ -153,7 +153,7 @@
     drawPattern(r, c);
   }
 
-  canvas.drawText = function (r, c, text, color) {
+  canvas.drawText = function (r, c, text) {
     var rx = (c - 1) * canvas.scale;
     var ry = (r - 1) * canvas.scale;
 

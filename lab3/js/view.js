@@ -13,8 +13,8 @@
     var cell = {'r': i + 1, 'c': j + 1};
     var text = graph.interprete(graph.map[i][j]);
 
-    view.setCellText(cell, cur);
     view.setCellColor(cell, utils.clickedColor);
+    view.setCellText(cell, cur);
 
     var d = graph.solution[i][j];
     var ndi = utils.di[d];
@@ -57,7 +57,7 @@
   }
 
   view.setCellText = function (cell, text) {
-    canvas.drawText(cell.r, cell.c, text, utils.defaultTextColor);
+    canvas.drawText(cell.r, cell.c, text);
   }
 
   view.resetCell = function (cell) {
