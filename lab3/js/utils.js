@@ -2,9 +2,10 @@
   utils.di = [-1, 0, 1, 0];
   utils.dj = [0, 1, 0, -1];
 
-  utils.lightBrown = "rgb(86, 51, 36)";
-  utils.darkBrown = "rgb(52, 34, 34)";
-  utils.red = "rgb(255, 0, 0)";
+  utils.clickedColor = "red";
+  utils.hoverColor = "pink";
+  utils.normalColor = "white";
+  utils.defaultTextColor = "balck";
 
   utils.rgbSum = function(c1, c2) {
     var output = "rgb(" + Math.floor((c1.r + c2.r) / 2) + ", " + Math.floor((c1.g + c2.g) / 2) + ", " + Math.floor((c1.b + c2.b) / 2) + ")";

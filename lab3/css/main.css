@@ -13,6 +13,7 @@ div {
 
 .container {
 	width: 1200px;
+	min-height: 685px;
 	margin: auto;
 }
 
