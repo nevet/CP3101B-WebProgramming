@@ -157,13 +157,16 @@
     var rx = (c - 1) * canvas.scale;
     var ry = (r - 1) * canvas.scale;
 
-    ctx.font = "10px Georgia";
-    ctx.fillStyle = color;
-    ctx.fillText(text, rx + 2, ry + 2);
+    ctx.font = "30px Georgia";
+    ctx.fillStyle = 'black';
+    ctx.fillText(text, rx + 6, ry + 22);
   }
 
   canvas.resetCell = function (r, c) {
-    canvas.drawBackground(r, c, utils.normalColor);
+    var rx = (c - 1) * canvas.scale;
+    var ry = (r - 1) * canvas.scale;
+
+    ctx.clearRect(rx + 1, ry + 1, canvas.scale - 6, canvas.scale - 6);
     drawPattern(r, c);
   }
 
