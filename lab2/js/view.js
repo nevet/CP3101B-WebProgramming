@@ -4,7 +4,7 @@
   var instruction = $('#instruction');
   var stepCount = $('#step-count');
 
-  var styledName = ['<span id="indicator">H</span>ome', '<span id="indicator">R</span>iver', '<span id="indicator">G</span>arden', '<span id="indicator">L</span>ibrary'];
+  var styledName = ['<span id="indicator">R</span>iver', '<span id="indicator">G</span>arden', '<span id="indicator">L</span>ibrary', '<span id="indicator">H</span>ome'];
   var scoreString = ['Perfect play!', 'Good enough!', 'Can be more efficient!', 'Have another try!'];
 
   var beforeHoverBg;
@@ -28,14 +28,12 @@
   function onCheckPoint(state) {
     switch (state) {
     case 0:
-      return 'Start from <span id="indicator">H</span>ome :)';
+      return 'We are now heading to <span id="indicator">R</span>iver!';
     case 1:
-      return 'Good start! We are now heading to <span id="indicator">R</span>iver!';
-    case 2:
       return 'Good job! We are now heading to <span id="indicator">G</span>arden!';
-    case 3:
+    case 2:
       return 'Well done! We are now heading to <span id="indicator">L</span>ibrary!';
-    case 4:
+    case 3:
       return 'Almost there! We are now heading <span id="indicator">H</span>ome!';
     }
   }
@@ -78,17 +76,21 @@
     var r = parseInt(cell.attr('r')) - 1;
     var c = parseInt(cell.attr('c')) - 1;
 
-    view.setCellText(cell, graph.interprete(graph.map[i][j]));
-    view.setCellColor(cell, (r + c) % 2 == 0 ? utils.lightBrown : utils.darkBrown);
+    beforeHoverBg = (r + c) % 2 == 0 ? utils.lightBrown : utils.darkBrown;
+
+    view.setCellText(cell, graph.interprete(graph.map[r][c]));
+    view.setCellColor(cell, beforeHoverBg);
   }
 
   view.highlightCell = function (cell, curStep) {
     var r = parseInt(cell.attr('r')) - 1;
     var c = parseInt(cell.attr('c')) - 1;
-    var text = graph.interprete(graph.map[i][j]);
+    var text = graph.interprete(graph.map[r][c]);
 
-    setCellColor(cell, utils.red);
-    setCellText(cell, graph.map[r][c] < 4 ? text + '/' + curStep : curStep);
+    view.setCellColor(cell, utils.red);
+    view.setCellText(cell, graph.map[r][c] < 4 ? text + '/' + curStep : curStep);
+
+    beforeHoverBg = utils.red;
   }
 
   view.setInstruction = function (html, classType) {
@@ -128,7 +130,7 @@
       for (var j = 0; j < 5; j ++) {
         var cell = $(table.rows[i].cells[j]);
 
-        resetCell(cell);
+        view.resetCell(cell);
       }
   }
 
@@ -181,25 +183,25 @@
   }
 
   view.updateMove = function (moveInfo, pos) {
-    var cell = getCell(pos);
+    var cell = view.getCell(pos);
 
     switch (moveInfo.status) {
       case 'err':
-        setInstruction(moveInfo.msg, 'error');
+        view.setInstruction(moveInfo.msg, 'error');
         break;
       case 'undo':
-        resetCell(cell);
-        setInstruction(getInstruction(moveInfo.prevPos), '');
-        setStepCount(moveInfo.curStep);
+        view.resetCell(cell);
+        view.setInstruction(getInstruction(moveInfo.prevPos, moveInfo.state), '');
+        view.setStepCount(moveInfo.curStep);
         break;
       case 'ok':
-        highlightCell(cell, moveInfo.curStep);
-        setInstruction(getInstruction(pos), 'success');
-        setStepCount(moveInfo.curStep);
+        view.highlightCell(cell, moveInfo.curStep);
+        view.setInstruction(getInstruction(pos, moveInfo.state), 'success');
+        view.setStepCount(moveInfo.curStep);
         break;
       case 'fin':
-        setInstruction('Congratulations!', 'success');
-        setStepCount(moveInfo.curStep);
+        view.setInstruction('Congratulations!', 'success');
+        view.setStepCount(moveInfo.curStep);
         $('html').trigger('reloadPlayground');
         break;
     }

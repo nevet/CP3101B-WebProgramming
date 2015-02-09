@@ -1,5 +1,6 @@
 (function (path, $, undefined) {
   var curStep = 0;
+  var state = 0;
   var lastPos = {'r': -1, 'c': -1};
 
   path.walk = [[], [], [], [], []];
@@ -16,21 +17,26 @@
     var dr = position.r - lastPos.r;
     var dc = position.c - lastPos.c;
 
+    if (dr == 0 && dc == 0) return -2;
+
     return dr != 0 ? dr + 1 : 2 - dc;
   }
 
   function getPrevPos(position) {
     var d = path.walk[position.r][position.c];
 
-    return {'r': position.r - d, 'c': position.c - d};
+    return {'r': position.r - utils.di[d], 'c': position.c - utils.dj[d]};
   }
 
-  path.init = function {
-    curStep = 0;
-    lastPos = {'r': -1, 'c': -1};
+  path.init = function () {
+    view.resetPath();
     utils.fillArray(path.walk, -1);
 
-    view.resetPath();
+    curStep = 1;
+    state = 0;
+    lastPos = {'r': graph.startPosR, 'c': graph.startPosC};
+
+    view.updateMove({'status': 'ok', 'curStep': curStep, 'state': state}, lastPos);
   }
 
   path.tryPlace = function (position) {
@@ -41,30 +47,41 @@
 
     if (graph.map[r][c] == 5) {
       moveInfo = {'status': 'err', 'msg': 'On obstacle!'};
+    } else 
+    if (graph.map[r][c] == 0 && curStep == 1) {
+      moveInfo = {'status': 'err', 'msg': 'Cannot walk across the path!'};
     } else {
       var direction = getDirection(position);
 
       if (direction == -1) {
         moveInfo = {'status': 'err', 'msg': 'Cats cannot fly!'};
       } else
-      if (direction == 0) {
+      if (direction == -2) {
         curStep --;
 
         lastPos = getPrevPos(position);
-        moveInfo = {'status': 'undo', 'prevPos': lastPos, 'curStep': curStep};
+        if (graph.map[lastPos.r][lastPos.c] < 4 &&
+            graph.map[lastPos.r][lastPos.c] != 0) {
+          state --;
+        }
+        moveInfo = {'status': 'undo', 'prevPos': lastPos, 'curStep': curStep, 'state': state};
         
-        path.walk[position.r][position.c] = -1;
+        path.walk[r][c] = -1;
       } else
-      if(path.walk[r][c] != -1 ||
-         (r == graph.startPosR && c == graph.startPosC && curStep == 0)) {
+      if(path.walk[r][c] != -1) {
         moveInfo = {'status': 'err', 'msg': 'Cannot walk across the path!'};
       } else {
         curStep ++;
-        
+
         if (r == graph.startPosR && c == graph.startPosC) {
           moveInfo = {'status': 'fin', 'curStep': curStep};
         } else {
-          moveInfo = {'status': 'ok', 'curStep': curStep};
+          if (graph.map[r][c] < 4) {
+            state ++;
+          }
+
+          path.walk[r][c] = direction;
+          moveInfo = {'status': 'ok', 'curStep': curStep, 'state': state};
           lastPos = position;
         }
       }
@@ -73,5 +90,3 @@
     view.updateMove(moveInfo, position);
   }
 } (window.path = window.path || {}, jQuery));
-
-if (!clickOnAdjcent(cell)) return {'status': 'err', 'msg': 'Cats cannot fly!'};
