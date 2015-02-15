@@ -28,7 +28,7 @@ function valid($i, $j, $step) {
   return true;
 }
 
-function copyArray($ori, $copy) {
+function copyArray($ori, & $copy) {
   for ($i = 0; $i < count($ori); $i ++)
     for ($j = 0; $j < count($ori[$i]); $j ++) {
       $copy[$i][$j] = $ori[$i][$j];

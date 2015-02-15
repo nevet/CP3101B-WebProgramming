@@ -26,27 +26,9 @@
     return utils.abs(i1 - i2) + utils.abs(j1 - j2);
   }
 
-  utils.inside = function (i, j) {
-    return i >= 0 && i < 5 && j >= 0 && j < 5;
-  }
-
   utils.fillArray = function (array, value) {
     for (var i = 0; i < 5; i ++)
       for (var j = 0; j < 5; j ++)
         array[i][j] = value;
-  }
-
-  utils.clone = function (ori, copy) {
-    for (var i = 0; i < 5; i ++)
-      for (var j = 0; j < 5; j ++)
-        copy[i][j] = ori[i][j];
-  }
-
-  utils.random = function (lower, upper) {
-    return lower + Math.floor(Math.random() * (upper - lower));
-  }
-
-  utils.randomCoord = function () {
-    return {'r': utils.random(0, 5), 'c': utils.random(0, 5)};
   }
 } (window.utils = window.utils || {}, jQuery));

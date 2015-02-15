@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require_once("solver.php");
 
@@ -58,16 +59,19 @@ function generateNewPuzzle() {
   randomizeObstacle(rand(4, 7));
   randomizeCheckPoint();
 
-  $result = solve($startPosR, $startPosC, $puzzle);
+  $solution = solve($startPosR, $startPosC, $puzzle);
 
-  while ($result["bestCount"] > 25)
+  while ($solution["bestCount"] > 25)
   {
     $puzzle = array_fill(0, 5, array_fill(0, 5, 4));
     randomizeObstacle(rand(4, 7));
     randomizeCheckPoint();
 
-    $result = solve($startPosR, $startPosC, $puzzle);
+    $solution = solve($startPosR, $startPosC, $puzzle);
   }
+
+  $_SESSION["bestCount"] = $solution["bestCount"];
+  $_SESSION["solution"] = $solution["solution"];
 
   $return["puzzle"] = $puzzle;
 
@@ -75,12 +79,6 @@ function generateNewPuzzle() {
   $return["startPosC"] = $startPosC;
 
   echo json_encode($return);
-}
-
-function generateSolution() {
-  global $puzzle, $startPosR, $startPosC;
-
-  solve($startPosR, $startPosC, $puzzle);
 }
 
 if (isAjax()) {
@@ -92,8 +90,12 @@ if (isAjax()) {
       case "new":
         generateNewPuzzle();
         break;
+      case "bestCount":
+        echo $_SESSION["bestCount"];
+        break;
       case "solution":
-        generateSolution();
+        echo json_encode(array("bestCount" => $_SESSION["bestCount"],
+                               "solution" => $_SESSION["solution"]));
         break;
       default:
         echo "wrong";

@@ -27,7 +27,12 @@
   $(function () {
     init();
 
-    $('#hint').hover(view.showSolution, view.hideSolution);
+    $('#hint').hover(function () {
+      $.get('php/puzzle.php', {'cmd': 'solution'}, function (data) {
+        view.renderSolution(JSON.parse(data));
+        view.showSolution();
+      });
+    }, view.hideSolution);
 
     $('#play-table').mousemove(function () {
       var cell = getCellUnderMouse(event);
@@ -41,8 +46,11 @@
     });
 
     $('html').on('reloadPlayground', function (event, stepCount) {
-      view.congratInfo(stepCount);
-      init();
+      $.get('php/puzzle.php', {'cmd': 'bestCount'}, function (data) {
+        view.congratInfo(parseInt(data), stepCount);
+      }).done(function () {
+        init();
+      });
     });
 
     $('#play-table').on("click", function () {

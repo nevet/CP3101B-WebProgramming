@@ -7,7 +7,7 @@
   var styledName = ['<span id="indicator">R</span>iver', '<span id="indicator">G</span>arden', '<span id="indicator">L</span>ibrary', '<span id="indicator">H</span>ome'];
   var scoreString = ['Perfect play!', 'Good enough!', 'Can be more efficient!', 'Have another try!'];
 
-  function printPath(i, j, cur) {
+  function printPath(i, j, cur, solution) {
     if (cur == 0) return;
 
     var cell = {'r': i + 1, 'c': j + 1};
@@ -16,11 +16,11 @@
     setCellColor(cell, utils.clickedColor);
     setCellText(cell, cur);
 
-    var d = graph.solution[i][j];
+    var d = solution[i][j];
     var ndi = utils.di[d];
     var ndj = utils.dj[d];
 
-    printPath(i + ndi, j + ndj, cur - 1);
+    printPath(i + ndi, j + ndj, cur - 1, solution);
   }
 
   function onCheckPoint(state) {
@@ -44,10 +44,10 @@
     return onCheckPoint(state);
   }
 
-  function getScore(count) {
-    if (count == graph.bestCount + 1) return scoreString[0];
-    if (count - graph.bestCount < 4) return scoreString[1];
-    if (count - graph.bestCount < 6) return scoreString[2];
+  function getScore(bestCount, count) {
+    if (count == bestCount + 1) return scoreString[0];
+    if (count - bestCount < 4) return scoreString[1];
+    if (count - bestCount < 6) return scoreString[2];
 
     return '';
   }
@@ -83,14 +83,17 @@
     stepCount.text(count);
   }
 
-  view.renderSolution = function () {
-    var solution = graph.solution;
+  view.renderSolution = function (soln) {
+    var bestCount = soln.bestCount;
+    var solution = soln.solution;
+    
+    console.log(solution);
 
     var bdi = utils.di[solution[graph.startPosR][graph.startPosC]];
     var bdj = utils.dj[solution[graph.startPosR][graph.startPosC]];
     
     canvas.setCanvas(hintCanvas);
-    printPath(graph.startPosR + bdi, graph.startPosC + bdj, graph.bestCount);
+    printPath(graph.startPosR + bdi, graph.startPosC + bdj, bestCount, solution);
     canvas.setCanvas(playCanvas);
   }
 
@@ -181,7 +184,7 @@
     }
   }
 
-  view.congratInfo = function (count) {
-    alert('You have completed in ' + count + ' moves!\n' + getScore(count));
+  view.congratInfo = function (bestCount, count) {
+    alert('You have completed in ' + count + ' moves!\n' + getScore(bestCount, count));
   }
 } (window.view = window.view || {}, jQuery));

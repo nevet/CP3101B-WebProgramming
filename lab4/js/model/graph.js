@@ -2,8 +2,6 @@
   var checkPoint = ['H', 'R', 'G', 'L', '.', '#'];
 
   graph.map = [[], [], [], [], []];
-  graph.solution = [[], [], [], [], []];
-  graph.bestCount = -1;
   graph.startPosR = -1;
   graph.startPosC = -1;
 
