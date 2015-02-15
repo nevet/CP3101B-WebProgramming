@@ -1,7 +1,69 @@
 <?php
+
+$puzzle;
+$startPosR;
+$startPosC;
+
 function is_ajax() {
   return isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
          strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+}
+
+function randomizeObstacle($obstacle) {
+  global $puzzle;
+
+  $coordr = rand(0, 4);
+  $coordc = rand(0, 4);
+
+  while ($obstacle > 0) {
+    while ($puzzle[$coordr][$coordc] != 4) {
+      $coordr = rand(0, 4);
+      $coordc = rand(0, 4);
+    }
+
+    $puzzle[$coordr][$coordc] = 5;
+
+    $obstacle--;
+  }
+}
+
+function randomizeCheckPoint() {
+  global $puzzle, $startPosR, $startPosC;
+
+  for ($i = 0; $i < 5; $i ++) {
+    $cur = $i == 4 ? 5 : $i;
+    
+    $coordr = rand(0, 4);
+    $coordc = rand(0, 4);
+
+    while ($puzzle[$coordr][$coordc] != 4) {
+      $coordr = rand(0, 4);
+      $coordc = rand(0, 4);
+    }
+
+    $puzzle[$coordr][$coordc] = $cur;
+
+    if ($cur == 0) {
+      $startPosR = $coordr;
+      $startPosC = $coordc;
+    }
+  }
+}
+
+function generateNewPuzzle() {
+  global $puzzle, $startPosR, $startPosC;
+
+  $puzzle = array_fill(0, 5, array_fill(0, 5, 4));
+
+  randomizeObstacle(rand(4, 7));
+  randomizeCheckPoint();
+
+  $return["puzzle"] = $puzzle;
+
+  $return["startPosR"] = $startPosR;
+  $return["startPosC"] = $startPosC;
+
+  echo json_encode($return);
 }
 
 if (is_ajax()) {
@@ -27,28 +89,5 @@ if (is_ajax()) {
       case "test": test_function(); break;
     }
   }
-}
-
-function generateNewPuzzle() {
-  $puzzle = array(array(4, 4, 4, 4, 4),
-                  array(4, 4, 4, 4, 4),
-                  array(4, 4, 4, 4, 4),
-                  array(4, 4, 4, 4, 4),
-                  array(4, 4, 4, 4, 4));
-
-  echo json_encode($puzzle);
-}
-
-function test_function(){
-  $return = $_POST;
-  
-  //Do what you need to do with the info. The following are some examples.
-  //if ($return["favorite_beverage"] == ""){
-  //  $return["favorite_beverage"] = "Coke";
-  //}
-  //$return["favorite_restaurant"] = "McDonald's";
-  
-  $return["json"] = json_encode($return);
-  echo json_encode($return);
 }
 ?>

@@ -7,51 +7,19 @@
   graph.startPosR = -1;
   graph.startPosC = -1;
 
-  function randomizeObstacle(obstacle) {
-    var coord = utils.randomCoord();
-    while (obstacle > 0) {
-      while (graph.map[coord.r][coord.c] != 4) {
-        coord = utils.randomCoord();
-      }
-
-      graph.map[coord.r][coord.c] = 5;
-
-      obstacle--;
-    }
-  }
-
-  function randomizeCheckPoint() {
-    for (var i = 0; i < 5; i ++) {
-      var cur = i == 4 ? 5 : i;
-      var coord = utils.randomCoord();
-
-      while (graph.map[coord.r][coord.c] != 4) {
-        coord = utils.randomCoord();
-      }
-
-      graph.map[coord.r][coord.c] = cur;
-
-      if (cur == 0) {
-        graph.startPosR = coord.r;
-        graph.startPosC = coord.c;
-      }
-    }
-  }
-
-  graph.init = function () {
+  graph.init = function (ajaxData) {
     graph.bestCount = -1;
 
-    while (graph.bestCount < 0 || graph.bestCount > 25) {
-      utils.fillArray(graph.map, 4);
+    for (var i = 0; i < 5; i ++)
+      for (var j = 0; j < 5; j ++)
+        graph.map[i][j] = ajaxData.puzzle[i][j];
 
-      randomizeCheckPoint();
-      randomizeObstacle(utils.random(4, 8));
+    graph.startPosR = ajaxData.startPosR;
+    graph.startPosC = ajaxData.startPosC;
 
-      solver.run();
-    }
+    // solver.run();
 
     view.renderMap();
-    view.renderSolution();
   }
 
   graph.interprete = function (num) {

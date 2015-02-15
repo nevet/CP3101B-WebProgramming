@@ -4,7 +4,8 @@
 
   function init() {
     $.get('php/puzzle.php', {'cmd': 'new'}, function (data) {
-      console.log(data);
+      graph.init(JSON.parse(data));
+      path.init();
     });
   }
 
