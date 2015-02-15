@@ -34,9 +34,14 @@ mkdir $PHP_DEST_DIR
 
 cp -r $PHP_SRC_DIR $HOST_ADDR
 
-chmod 644 "$PHP_DEST_DIR/img/*"
+IMAGES=$PHP_DEST_DIR/img/*
 
-if exist; then
+for img in $IMAGES
+do
+	chmod 644 $img
+done
+
+if $exist; then
 	echo "$PHP_DEST_DIR updated."
 else
 	echo "$PHP_DEST_DIR uploaded."
