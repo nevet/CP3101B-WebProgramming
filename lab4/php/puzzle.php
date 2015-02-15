@@ -1,10 +1,12 @@
 <?php
 
-$puzzle;
+require_once("solver.php");
+
+$puzzle = array_fill(0, 5, array_fill(0, 5, 4));
 $startPosR;
 $startPosC;
 
-function is_ajax() {
+function isAjax() {
   return isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
          strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 }
@@ -53,10 +55,19 @@ function randomizeCheckPoint() {
 function generateNewPuzzle() {
   global $puzzle, $startPosR, $startPosC;
 
-  $puzzle = array_fill(0, 5, array_fill(0, 5, 4));
-
   randomizeObstacle(rand(4, 7));
   randomizeCheckPoint();
+
+  $result = solve($startPosR, $startPosC, $puzzle);
+
+  while ($result["bestCount"] > 25)
+  {
+    $puzzle = array_fill(0, 5, array_fill(0, 5, 4));
+    randomizeObstacle(rand(4, 7));
+    randomizeCheckPoint();
+
+    $result = solve($startPosR, $startPosC, $puzzle);
+  }
 
   $return["puzzle"] = $puzzle;
 
@@ -66,7 +77,13 @@ function generateNewPuzzle() {
   echo json_encode($return);
 }
 
-if (is_ajax()) {
+function generateSolution() {
+  global $puzzle, $startPosR, $startPosC;
+
+  solve($startPosR, $startPosC, $puzzle);
+}
+
+if (isAjax()) {
   // for GET
   if (isset($_GET["cmd"]) && !empty($_GET["cmd"])) {
     $command = $_GET["cmd"];
@@ -76,17 +93,11 @@ if (is_ajax()) {
         generateNewPuzzle();
         break;
       case "solution":
+        generateSolution();
         break;
       default:
         echo "wrong";
         break;
-    }
-  }
-
-  if (isset($_POST["cmd"]) && !empty($_POST["cmd"])) { //Checks if action value exists
-    $action = $_POST["action"];
-    switch($action) { //Switch case for value of action
-      case "test": test_function(); break;
     }
   }
 }

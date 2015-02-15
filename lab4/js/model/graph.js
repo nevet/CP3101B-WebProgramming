@@ -17,8 +17,6 @@
     graph.startPosR = ajaxData.startPosR;
     graph.startPosC = ajaxData.startPosC;
 
-    // solver.run();
-
     view.renderMap();
   }
 
