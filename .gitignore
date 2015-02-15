@@ -1,3 +1,7 @@
 # ignore password
 .htaccess
 passwd
+
+# ignore test and try files
+test*
+try*
