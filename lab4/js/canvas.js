@@ -130,7 +130,7 @@
       }
   }
 
-  function clearCanvas() {
+  canvas.clearCanvas = function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
@@ -171,7 +171,7 @@
   }
 
   canvas.resetCanvas = function () {
-    clearCanvas();
+    canvas.clearCanvas();
     drawPuzzle();
   }
 } (window.canvas = window.canvas || {}, jQuery));

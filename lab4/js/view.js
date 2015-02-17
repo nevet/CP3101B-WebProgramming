@@ -93,6 +93,7 @@
     var bdj = utils.dj[solution[graph.startPosR][graph.startPosC]];
     
     canvas.setCanvas(hintCanvas);
+    canvas.clearCanvas();
     printPath(graph.startPosR + bdi, graph.startPosC + bdj, bestCount, solution);
     canvas.setCanvas(playCanvas);
   }
