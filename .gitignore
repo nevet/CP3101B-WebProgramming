@@ -2,6 +2,7 @@
 .htaccess
 passwd
 
-# ignore test and try files
+# ignore config, test and try files
 test*
 try*
+config*
