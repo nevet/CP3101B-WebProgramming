@@ -27,3 +27,7 @@ This lab talks about `PHP` and `AJAX`. The lab requires to make the puzzle inter
 **Note**
 
 I installed `XAMPP` as my localhost. It's an open source (free) and easy-to-use local server that supports `PHP`. Also, to make deployment easier, I coded a small script, `deploy.sh`, to automate the deployment process. Currently, `deploy.sh` will copy the web folder to `xampp/htdocs` and have some necessary configs done (such as file permission change). I will use `deploy.sh` to automate the deployment process to CP3101B server.
+
+## Lab 5
+
+This lab talks about `DataBase`. The lab requires to make the puzzle interface in Lab 4 interacts with a MySQL database. The database should record the best step count and the best solving time for each map. For my application, this requirement is a bit meaningless, since my graph instance are all auto-generated, so it's very unlikely to get an identical graph. The live demo is [here](http://cp3101b.comp.nus.edu.sg/~huangda/lab5).

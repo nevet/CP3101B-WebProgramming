@@ -137,7 +137,7 @@ function endGame() {
   echo $_SESSION["bestCount"];
 }
 
-// if (isAjax()) {
+if (isAjax()) {
   // for GET
   if (isset($_GET["cmd"]) && !empty($_GET["cmd"])) {
     $command = $_GET["cmd"];
@@ -158,5 +158,5 @@ function endGame() {
         break;
     }
   }
-// }
+}
 ?>
