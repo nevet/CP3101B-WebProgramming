@@ -98,7 +98,6 @@ function generateNewPuzzle() {
   $return["startPosR"] = $startPosR;
   $return["startPosC"] = $startPosC;
 
-  echo $map."<br>";
   echo json_encode($return);
 }
 
