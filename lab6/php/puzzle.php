@@ -57,14 +57,12 @@ function randomizeCheckPoint() {
   }
 }
 
-function stringify() {
-  global $puzzle;
-
+function stringify($array) {
   $str = "";
 
   for ($i = 0; $i < 5; $i ++) {
     for ($j = 0; $j < 5; $j ++) {
-      $str = $str . $puzzle[$i][$j];
+      $str = $str . $array[$i][$j];
     }
   }
 
@@ -131,7 +129,7 @@ function getUserInfo() {
 }
 
 function generateNewPuzzle() {
-  global $puzzle, $startPosR, $startPosC;
+  global $puzzle, $startPosR, $startPosC, $db;
 
   randomizeObstacle(rand(4, 7));
   randomizeCheckPoint();
@@ -147,15 +145,22 @@ function generateNewPuzzle() {
     $solution = solve($startPosR, $startPosC, $puzzle);
   }
 
-  $map = stringify();
+  $map = stringify($puzzle);
+  $sol = stringify($solution["solution"]);
+
+  $db = new mysqli(db_host, db_uid, db_pwd, db_name);
+  $res = $db->query("SELECT * FROM PUZZLES WHERE MAP='$map'");
+
+  if (!$res || $res->num_rows == 0) {
+    $res = $db->query("SHOW TABLE STATUS LIKE 'PUZZLES'");
+    $res = $res->fetch_assoc();
+    $_SESSION["mapId"] = $res['Auto_increment'];
+    $res = $db->query("INSERT INTO PUZZLES VALUES(NULL, '$map', ".$solution["bestCount"].", '$sol', 1, 0, 0)");
+  }
   
-  $_SESSION["map"] = $map;
-  $_SESSION["startTime"] = microtime(true);
-  $_SESSION["bestCount"] = $solution["bestCount"]; 
-  $_SESSION["solution"] = $solution["solution"];
+  // $_SESSION["startTime"] = microtime(true);
 
   $return["puzzle"] = $puzzle;
-
   $return["startPosR"] = $startPosR;
   $return["startPosC"] = $startPosC;
 
