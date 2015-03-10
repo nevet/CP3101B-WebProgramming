@@ -24,14 +24,20 @@
   }
 
   user.submitProfile = function () {
-    var data = {'cmd': 'userEdit', 'userId': userId, 'name': inputName.text(), 'oldPass': inputOldPasswd.text(), 'newPass': inputNewPasswd};
-    $.post('php/puzzle/php', data, function (response) {
-      if (response == "ok") {
-        alert("Profile updated!");
-      } else {
-        alert(response);
-      }
-    });
+    var data = {'cmd': 'userEdit', 'userId': userId, 'name': inputName.val(), 'oldPass': inputOldPasswd.val(), 'newPass': inputNewPasswd.val()};
+    console.log(data);
+    // $.post('php/puzzle/php', data, function (response) {
+    //   if (response == "ok") {
+    //     alert("Profile updated!");
+
+    //     return true;
+    //   } else {
+    //     alert(response);
+
+    //     return false;
+    //   }
+    // });
+    return true;
   }
 
   user.verify = function () {

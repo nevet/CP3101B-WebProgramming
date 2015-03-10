@@ -38,19 +38,22 @@
     });
 
     $('#profile').on("click", function () {
-      user.populateProfile().done(function () {
-        view.showCover();
-        view.showProfileDiv();
-      });
+      user.populateProfile();
+      view.showCover();
+      view.showProfileDiv();
     });
 
     $('#profileSubmit').on("click", function () {
-      var success = user.submitProfile();
+      var success;
 
-      if (success) {
-        view.hideProfileDiv();
-        view.hideCover();
-      }
+      $.when(
+        success = user.submitProfile()
+      ).then(function () {
+        if (success) {
+          view.hideProfileDiv();
+          view.hideCover();
+        }
+      });
     });
 
     $('#cover').on("click", function () {
