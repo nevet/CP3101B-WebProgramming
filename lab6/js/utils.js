@@ -1,0 +1,34 @@
+(function (utils, $, undefined) {
+  utils.di = [-1, 0, 1, 0];
+  utils.dj = [0, 1, 0, -1];
+
+  utils.clickedColor = "red";
+  utils.hoverColor = "pink";
+  utils.normalColor = "white";
+  utils.defaultTextColor = "balck";
+
+  utils.rgbSum = function(c1, c2) {
+    var output = "rgb(" + Math.floor((c1.r + c2.r) / 2) + ", " + Math.floor((c1.g + c2.g) / 2) + ", " + Math.floor((c1.b + c2.b) / 2) + ")";
+    return output;
+  }
+
+  utils.genColor = function (r, g, b) {
+    return {"r": parseInt(r, 10),
+            "g": parseInt(g, 10),
+            "b": parseInt(b, 10)};
+  }
+
+  utils.abs = function(a) {
+    return a < 0 ? -a : a;
+  }
+
+  utils.dist = function (i1, j1, i2, j2) {
+    return utils.abs(i1 - i2) + utils.abs(j1 - j2);
+  }
+
+  utils.fillArray = function (array, value) {
+    for (var i = 0; i < 5; i ++)
+      for (var j = 0; j < 5; j ++)
+        array[i][j] = value;
+  }
+} (window.utils = window.utils || {}, jQuery));
