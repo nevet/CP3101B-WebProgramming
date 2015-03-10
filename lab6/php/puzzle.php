@@ -91,7 +91,19 @@ function decode($solstr) {
 }
 
 function getRecord() {
-  
+  global $db;
+
+  $db = new mysqli(db_host, db_uid, db_pwd, db_name);
+  if ($db->connect_errno) // are we connected properly?
+    exit("Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error); 
+
+  $res = $db->query("SELECT * FROM RECORDS ORDER BY RECORD_ID DESC LIMIT 25");
+
+  while ($obj = mysql_fetch_object($res)) {
+    $arr[] = $obj;
+  }
+
+  echo json_encode($arr);
 }
 
 function generateUserName($userId) {
@@ -169,6 +181,8 @@ function editUserInfo() {
   $reqOldPass = $db->escape_string($_REQUEST["oldPass"]);
   $reqNewPass = $db->escape_string($_REQUEST["newPass"]);
 
+  if ($reqOldPass == "") $reqOldPass = NULL;
+
   $db = new mysqli(db_host, db_uid, db_pwd, db_name);
   if ($db->connect_errno) // are we connected properly?
     exit("Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error); 
@@ -207,6 +221,8 @@ function verifyUserInfo() {
 
   $reqUserId = $db->escape_string($_REQUEST["userId"]);
   $reqPasswd = $db->escape_string($_REQUEST["passwd"]);
+
+  if ($reqOldPass == "") $reqOldPass = NULL;
 
   $db = new mysqli(db_host, db_uid, db_pwd, db_name);
   if ($db->connect_errno) // are we connected properly?
