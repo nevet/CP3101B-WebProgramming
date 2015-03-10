@@ -139,7 +139,7 @@ function getUserInfo() {
 
     // echo $session_id . "<br>";
 
-    $res = $db->query("INSERT INTO USERS VALUES(null, '$session_id', '$guestName')");
+    $res = $db->query("INSERT INTO USERS VALUES(null, '$session_id', '$guestName', '')");
 
     echo json_encode(array("userType" => "new", "userName" => $guestName));
   } else {
