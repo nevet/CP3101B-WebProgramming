@@ -226,7 +226,11 @@
     var timeUsed = json.timeUsed;
 
     if (timeUsed < 5) {
-      user.verify().done(function (res) {
+      var res;
+
+      $.when(
+        res = user.verify()
+      ).then(function () {
         if (res != "ok") {
           alert('You are not authorized!');
           return;

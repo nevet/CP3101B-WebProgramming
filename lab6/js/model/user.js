@@ -11,32 +11,38 @@
       console.log(json);
 
       if (json.userType == "return") {
-        userName = json.userName;
         alert(json.userName + ", welcome back!");
       } else {
         alert("Welcome on board, " + json.userName);
       }
+
+      userName = json.userName;
+      userId = json.userId;
     });
   }
 
   user.populateProfile = function () {
-    inputName.text(userName);
+    inputName.val(userName);
+    inputOldPasswd.val("");
+    inputNewPasswd.val("");
   }
 
   user.submitProfile = function () {
     var data = {'cmd': 'userEdit', 'userId': userId, 'name': inputName.val(), 'oldPass': inputOldPasswd.val(), 'newPass': inputNewPasswd.val()};
-    console.log(data);
-    // $.post('php/puzzle/php', data, function (response) {
-    //   if (response == "ok") {
-    //     alert("Profile updated!");
+    // console.log(data);
+    
+    $.post('php/puzzle.php', data, function (response) {
+      if (response == "ok") {
+        alert("Profile updated!");
 
-    //     return true;
-    //   } else {
-    //     alert(response);
+        return true;
+      } else {
+        alert(response);
 
-    //     return false;
-    //   }
-    // });
+        return false;
+      }
+    });
+
     return true;
   }
 

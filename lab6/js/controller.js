@@ -53,6 +53,8 @@
           view.hideProfileDiv();
           view.hideCover();
         }
+      }).fail(function () {
+        alert("Profile update failed, please contact admin for help.");
       });
     });
 

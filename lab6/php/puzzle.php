@@ -176,16 +176,16 @@ function editUserInfo() {
     return;
   }
 
+  $db = new mysqli(db_host, db_uid, db_pwd, db_name);
+  if ($db->connect_errno) // are we connected properly?
+    exit("Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error); 
+
   $reqUserId = $db->escape_string($_REQUEST["userId"]);
   $reqName = $db->escape_string($_REQUEST["name"]);
   $reqOldPass = $db->escape_string($_REQUEST["oldPass"]);
   $reqNewPass = $db->escape_string($_REQUEST["newPass"]);
 
   if ($reqOldPass == "") $reqOldPass = NULL;
-
-  $db = new mysqli(db_host, db_uid, db_pwd, db_name);
-  if ($db->connect_errno) // are we connected properly?
-    exit("Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error); 
 
   $res = $db->query("SELECT * FROM USERS WHERE USER_ID=$reqUserId");
 
@@ -204,7 +204,8 @@ function editUserInfo() {
     } else
     {
       $userId = $res["USER_ID"];
-      $db->query("UPDATE USERS SET USER_NAME=$reqName, USER_PASSWD=$reqNewPass WHERE USER_ID=$userId");
+      // echo "UPDATE USERS SET USER_NAME='$reqName', USER_PASSWD='$reqNewPass' WHERE USER_ID=$userId";
+      $db->query("UPDATE USERS SET USER_NAME='$reqName', USER_PASSWD='$reqNewPass' WHERE USER_ID=$userId");
 
       echo "ok";
     }
@@ -219,14 +220,14 @@ function verifyUserInfo() {
     return;
   }
 
+  $db = new mysqli(db_host, db_uid, db_pwd, db_name);
+  if ($db->connect_errno) // are we connected properly?
+    exit("Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error); 
+
   $reqUserId = $db->escape_string($_REQUEST["userId"]);
   $reqPasswd = $db->escape_string($_REQUEST["passwd"]);
 
   if ($reqOldPass == "") $reqOldPass = NULL;
-
-  $db = new mysqli(db_host, db_uid, db_pwd, db_name);
-  if ($db->connect_errno) // are we connected properly?
-    exit("Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error); 
 
   $res = $db->query("SELECT * FROM USERS WHERE USER_ID=$reqUserId");
 
