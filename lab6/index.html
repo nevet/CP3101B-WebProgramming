@@ -12,17 +12,37 @@
       <ul id="navigation">
         <li><a href="#">More &raquo;</a>
           <ul>
-            <li><a href="#">Game Status</a></li>
-            <li><a href="#">Profile</a></li>
+            <li id="gameStatus"><a href="#">Game Status</a></li>
+            <li id="profile"><a href="#">Profile</a></li>
           </ul>
         </li>
       </ul>
     </nav>
-    <div id="userInput">
-        <p>User Name <input type="text" name="userName"></p>
-        <p>Old Password <input type="text" name="oldPasswd"></p>
-        <p>New Password <input type="text" name="newPasswd"></p>
+    <div id="profileDiv">
+        <p>User Name <input type="text" class="profileTextBox" name="userName"/></p>
+        <p>Old Password <input type="text" class="profileTextBox" name="oldPasswd"/></p>
+        <p>New Password <input type="text" class="profileTextBox" name="newPasswd"/></p>
+        <input type="submit" class="submitButton" value="Submit"/> 
+    </div>
+    <div id="gameStatusDiv">
+      <div id="tableContainer" class="tableContainer">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="scrollTable" text-align="center">
+          <thead class="fixedHeader">
+            <tr>
+              <th>Puzzle Id</th>
+              <th>Player</th>
+              <th>Solving Steps</th>
+              <th>Solving Time</th>
+            </tr>
+          </thead>
+          <tbody class="scrollContent">
+            <tr>
+              <td>Cell Content 1</td><td>Cell Content 2</td><td>Cell Content 3</td><td>Cell Content 3</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+    </div>
     <div id="cover">
     </div>
     <div class="container">

@@ -126,9 +126,45 @@
     }
   }
 
+  view.showCover = function () {
+    $('#cover').css({
+      'visibility': 'visible'
+    });
+  }
+
+  view.hideCover = function () {
+    $('#cover').css({
+      'visibility': 'hidden'
+    });
+  }
+
+  view.showProfileDiv = function () {
+    $('#profileDiv').css({
+      'visibility': 'visible'
+    });
+  }
+
+  view.hideProfileDiv = function () {
+    $('#profileDiv').css({
+      'visibility': 'hidden'
+    });
+  }
+
+  view.showGameStatusDiv = function () {
+    $('#gameStatusDiv').css({
+      'visibility': 'visible'
+    });
+  }
+
+  view.hideGameStatusDiv = function () {
+    $('#gameStatusDiv').css({
+      'visibility': 'hidden'
+    });
+  }
+
   view.showSolution = function () {
     $('.hintpanel').css({
-      'z-index': 10,
+      'z-index': 10
     });
 
     $('.hintpanel').addClass('ani-fadeIn');

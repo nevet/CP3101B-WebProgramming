@@ -40,6 +40,22 @@
   $(function () {
     init(true);
 
+    $('#gameStatus').on("click", function () {
+      view.showCover();
+      view.showGameStatusDiv();
+    });
+
+    $('#profile').on("click", function () {
+      view.showCover();
+      view.showProfileDiv();
+    });
+
+    $('#cover').on("click", function () {
+      view.hideProfileDiv();
+      view.hideGameStatusDiv();
+      view.hideCover();
+    });
+
     $('#hint').hover(function () {
       $.get('php/puzzle.php', {'cmd': 'solution'}, function (data) {
         view.renderSolution(JSON.parse(data));
