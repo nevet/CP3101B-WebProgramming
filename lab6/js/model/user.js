@@ -33,8 +33,10 @@
     
     $.post('php/puzzle.php', data, function (response) {
       if (response == "ok") {
+        userName = data.name;
+        
         alert("Profile updated!");
-
+        
         return true;
       } else {
         alert(response);

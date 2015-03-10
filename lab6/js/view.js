@@ -216,7 +216,7 @@
       case 'fin':
         setInstruction('Congratulations!', 'success');
         setStepCount(moveInfo.curStep);
-        $('html').trigger('reloadPlayground', [moveInfo.curStep]);
+        $('html').trigger('gameFinished', [moveInfo.curStep]);
         break;
     }
   }

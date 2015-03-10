@@ -82,7 +82,7 @@
       }
     });
 
-    $('html').on('reloadPlayground', function (event, stepCount) {
+    $('html').on('gameFinished', function (event, stepCount) {
       $.get('php/puzzle.php', {'cmd': 'finish', 'userStep': stepCount}, function (data) {
         view.congratInfo(JSON.parse(data), stepCount);
       }).done(function () {
