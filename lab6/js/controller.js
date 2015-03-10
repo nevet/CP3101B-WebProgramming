@@ -3,13 +3,13 @@
   var lastCell = {'r': -1, 'c': -1};
 
   function init(checkUser) {
-    if (checkUser) {
-      user.init();
-    }
-
     $.get('php/puzzle.php', {'cmd': 'new'}, function (data) {
       graph.init(JSON.parse(data));
       path.init();
+    }).done(function () {
+      if (checkUser) {
+        user.init();
+      }
     });
   }
 

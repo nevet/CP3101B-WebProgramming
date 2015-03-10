@@ -7,6 +7,8 @@
     $.post('php/puzzle.php', {'cmd': 'record'}, function (data) {
       var json = JSON.parse(data);
 
+      console.log(json);
+
       tableContainer.css({
         "height": json.length * 25 + 28
       });
@@ -15,7 +17,9 @@
 
       for (var i = 0; i < json.length; i ++) {
         var row = json[i];
-        content.append('<tr><td>'+row[0]+'</td><td>'+row[1]+'</td><td>'+row[2]'</td><td>'+row[3]+'</td></tr>');
+        console.log(row);
+        content.append('<tr><td>'+row["PUZZLE_ID"]+'</td><td>'+row["USER_NAME"]
+                       +'</td><td>'+row["STEP"]+'</td><td>'+row["TIME"]+'</td></tr>');
       }
     });
   }

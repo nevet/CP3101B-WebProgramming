@@ -97,9 +97,9 @@ function getRecord() {
   if ($db->connect_errno) // are we connected properly?
     exit("Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error); 
 
-  $res = $db->query("SELECT * FROM RECORDS ORDER BY RECORD_ID DESC LIMIT 25");
-
-  while ($obj = mysql_fetch_object($res)) {
+  $res = $db->query("SELECT PUZZLE_ID, U.USER_NAME, TIME, STEP FROM RECORDS R, USERS U WHERE R.USER_ID=U.USER_ID ORDER BY RECORD_ID DESC LIMIT 25");
+  $arr = array();
+  while ($obj = mysqli_fetch_assoc($res)) {
     $arr[] = $obj;
   }
 
@@ -161,7 +161,7 @@ function getUserInfo() {
   } else {
     $res = $res->fetch_assoc();
     $_SESSION["userId"] = $res["USER_ID"];
-    echo json_encode(array("userType" => "return", "userId" => $userId, "userName" => $res["USER_NAME"]));
+    echo json_encode(array("userType" => "return", "userId" => $res["USER_ID"], "userName" => $res["USER_NAME"]));
   }
 
   $db->close();
