@@ -4,16 +4,7 @@
 
   function init(checkUser) {
     if (checkUser) {
-      $.post('php/puzzle.php', {'cmd': 'user'}, function (data) {
-        var json = JSON.parse(data);
-        console.log(json);
-
-        if (json.userType == "return") {
-          alert(json.userName + ", welcome back!");
-        } else {
-          alert("Welcome on board, " + json.userName);
-        }
-      });
+      user.init();
     }
 
     $.get('php/puzzle.php', {'cmd': 'new'}, function (data) {
@@ -41,13 +32,25 @@
     init(true);
 
     $('#gameStatus').on("click", function () {
+      gameStatus.refresh();
       view.showCover();
       view.showGameStatusDiv();
     });
 
     $('#profile').on("click", function () {
-      view.showCover();
-      view.showProfileDiv();
+      user.populateProfile().done(function () {
+        view.showCover();
+        view.showProfileDiv();
+      });
+    });
+
+    $('#profileSubmit').on("click", function () {
+      var success = user.submitProfile();
+
+      if (success) {
+        view.hideProfileDiv();
+        view.hideCover();
+      }
     });
 
     $('#cover').on("click", function () {

@@ -226,18 +226,12 @@
     var timeUsed = json.timeUsed;
 
     if (timeUsed < 5) {
-      var a = Math.floor((Math.random() * 100) + 1);
-      var b = Math.floor((Math.random() * 100) + 1);
-      var c = a + b;
-
-      var answer = prompt('You are too fast! Please answer:\n' + a + ' + ' + b + ' =');
-
-      if (answer != null) {
-        if (answer != c) {
-          alert('You are not a (intelligent) human!');
+      user.verify().done(function (res) {
+        if (res != "ok") {
+          alert('You are not authorized!');
           return;
         }
-      }
+      });
     }
 
     alert('You have completed in ' + count + ' moves in ' + timeUsed.toFixed(2) + 's!\n' + getScore(bestCount, count));

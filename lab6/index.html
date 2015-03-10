@@ -20,13 +20,13 @@
     </nav>
     <div id="profileDiv">
         <p>User Name <input type="text" class="profileTextBox" name="userName"/></p>
-        <p>Old Password <input type="text" class="profileTextBox" name="oldPasswd"/></p>
-        <p>New Password <input type="text" class="profileTextBox" name="newPasswd"/></p>
-        <input type="submit" class="submitButton" value="Submit"/> 
+        <p>Old Password <input type="password" class="profileTextBox" name="oldPasswd"/></p>
+        <p>New Password <input type="password" class="profileTextBox" name="newPasswd"/></p>
+        <input type="submit" class="submitButton" value="Submit" id="profileSubmit"/> 
     </div>
     <div id="gameStatusDiv">
       <div id="tableContainer" class="tableContainer">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="scrollTable" text-align="center">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="scrollTable" text-align="center" id="gameStatusTable">
           <thead class="fixedHeader">
             <tr>
               <th>Puzzle Id</th>
@@ -36,9 +36,6 @@
             </tr>
           </thead>
           <tbody class="scrollContent">
-            <tr>
-              <td>Cell Content 1</td><td>Cell Content 2</td><td>Cell Content 3</td><td>Cell Content 3</td>
-            </tr>
           </tbody>
         </table>
       </div>
@@ -70,10 +67,12 @@
       </div>
     </div>
     <script src="js/utils.js"></script>
-    <script src="js/canvas.js"></script>
-    <script src="js/view.js"></script>
     <script src="js/model/graph.js"></script>
     <script src="js/model/path.js"></script>
+    <script src="js/model/gameStatus.js"></script>
+    <script src="js/model/user.js"></script>
+    <script src="js/canvas.js"></script>
+    <script src="js/view.js"></script>
     <script src="js/controller.js"></script>
   </body>
 </html>

@@ -90,6 +90,10 @@ function decode($solstr) {
   return $solution;
 }
 
+function getRecord() {
+  
+}
+
 function generateUserName($userId) {
   $userName = "";
 
@@ -141,14 +145,87 @@ function getUserInfo() {
 
     $res = $db->query("INSERT INTO USERS VALUES(null, '$session_id', '$guestName', '')");
 
-    echo json_encode(array("userType" => "new", "userName" => $guestName));
+    echo json_encode(array("userType" => "new", "userId" => $userId, "userName" => $guestName));
   } else {
     $res = $res->fetch_assoc();
     $_SESSION["userId"] = $res["USER_ID"];
-    echo json_encode(array("userType" => "return", "userName" => $res["USER_NAME"]));
+    echo json_encode(array("userType" => "return", "userId" => $userId, "userName" => $res["USER_NAME"]));
   }
 
   $db->close();
+}
+
+function editUserInfo() {
+  global $db;
+
+  if (!isset($_REQUEST["userId"]) || !isset($_REQUEST["name"]) ||
+      !isset($_REQUEST["oldPass"]) || !isset($_REQUEST["newPass"])) {
+    echo "Fields cannot be empty!";
+    return;
+  }
+
+  $reqUserId = $db->escape_string($_REQUEST["userId"]);
+  $reqName = $db->escape_string($_REQUEST["name"]);
+  $reqOldPass = $db->escape_string($_REQUEST["oldPass"]);
+  $reqNewPass = $db->escape_string($_REQUEST["newPass"]);
+
+  $db = new mysqli(db_host, db_uid, db_pwd, db_name);
+  if ($db->connect_errno) // are we connected properly?
+    exit("Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error); 
+
+  $res = $db->query("SELECT * FROM USERS WHERE USER_ID=$reqUserId");
+
+  if (!$res || $res->num_rows == 0) {
+    echo "User doesn't exit, please contact admin for help!";
+  } else {
+    $res = $res->fetch_assoc();
+
+    if ($reqOldPass != $res["USER_PASSWD"]) {
+      echo "Old password wrong!";
+      return;
+    } else
+    if ($reqName == $res["USER_NAME"]) {
+      echo "Name has been used! Please change a name.";
+      return;
+    } else
+    {
+      $userId = $res["USER_ID"];
+      $db->query("UPDATE USERS SET USER_NAME=$reqName, USER_PASSWD=$reqNewPass WHERE USER_ID=$userId");
+
+      echo "ok";
+    }
+  }
+}
+
+function verifyUserInfo() {
+  global $db;
+
+  if (!isset($_REQUEST["userId"]) || !isset($_REQUEST["passwd"])) {
+    echo "Invalid operation! Please contact admin for help.";
+    return;
+  }
+
+  $reqUserId = $db->escape_string($_REQUEST["userId"]);
+  $reqPasswd = $db->escape_string($_REQUEST["passwd"]);
+
+  $db = new mysqli(db_host, db_uid, db_pwd, db_name);
+  if ($db->connect_errno) // are we connected properly?
+    exit("Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error); 
+
+  $res = $db->query("SELECT * FROM USERS WHERE USER_ID=$reqUserId");
+
+  if (!$res || $res->num_rows == 0) {
+    echo "Invalid operation! Please contact admin for help.";
+    return;
+  } else {
+    $res = $res->fetch_assoc();
+
+    if ($reqPasswd != $res["USER_PASSWD"]) {
+      echo "invalid";
+    } else {
+      echo "ok";
+    }
+  }
 }
 
 function generateNewPuzzle() {
@@ -240,6 +317,15 @@ function endGame() {
     switch ($command) {
       case "user":
         getUserInfo();
+        break;
+      case "userEdit":
+        editUserInfo();
+        break;
+      case "verify":
+        verifyUserInfo();
+        break;
+      case "record":
+        getRecord();
         break;
       case "new":
         generateNewPuzzle();
