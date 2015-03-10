@@ -172,7 +172,7 @@ function endGame() {
 
   $res = $db->query("SELECT * FROM PUZZLE WHERE MAP='" .$map."'");
 
-  if ($res->num_rows == 0) {
+  if (!$res || $res->num_rows == 0) {
     $res = $db->query("INSERT INTO PUZZLE VALUES('".$map."',". $_SESSION["bestCount"]. ", $userStep, $timeElapse)");
   } else {
     $row = $res->fetch_assoc();

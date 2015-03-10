@@ -2,7 +2,20 @@
   var gameState = 0;
   var lastCell = {'r': -1, 'c': -1};
 
-  function init() {
+  function init(checkUser) {
+    if (checkUser) {
+      $.post('php/puzzle.php', {'cmd': 'user'}, function (data) {
+        var json = JSON.parse(data);
+        console.log(json);
+
+        if (json.userType == "return") {
+          alert(json.userName + ", welcome back!");
+        } else {
+          alert("Welcome on board, " + json.userName);
+        }
+      });
+    }
+
     $.get('php/puzzle.php', {'cmd': 'new'}, function (data) {
       graph.init(JSON.parse(data));
       path.init();
@@ -25,7 +38,7 @@
   }
 
   $(function () {
-    init();
+    init(true);
 
     $('#hint').hover(function () {
       $.get('php/puzzle.php', {'cmd': 'solution'}, function (data) {
@@ -49,7 +62,7 @@
       $.get('php/puzzle.php', {'cmd': 'bestCount', 'userStep': stepCount}, function (data) {
         view.congratInfo(parseInt(data), stepCount);
       }).done(function () {
-        init();
+        init(false);
       });
     });
 
