@@ -59,8 +59,8 @@
     });
 
     $('html').on('reloadPlayground', function (event, stepCount) {
-      $.get('php/puzzle.php', {'cmd': 'bestCount', 'userStep': stepCount}, function (data) {
-        view.congratInfo(parseInt(data), stepCount);
+      $.get('php/puzzle.php', {'cmd': 'finish', 'userStep': stepCount}, function (data) {
+        view.congratInfo(JSON.parse(data), stepCount);
       }).done(function () {
         init(false);
       });

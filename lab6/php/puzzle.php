@@ -69,6 +69,27 @@ function stringify($array) {
   return $str;
 }
 
+function decode($solstr) {
+  $mul = 1;
+  $offset = 0;
+  $solution = array_fill(0, 5, array_fill(0, 5, 0));
+
+  if ($solstr[0] == '-') {
+    $mul = -1;
+    $offset = 1;
+  }
+
+  for ($i = 0; $i < 5; $i ++) {
+    for ($j = 0; $j < 5; $j ++) {
+      $solution[$i][$j] = intval($solstr[$i * 5 + $j + $offset]);
+    }
+  }
+
+  $solution[0][0] *= $mul;
+
+  return $solution;
+}
+
 function generateUserName($userId) {
   $userName = "";
 
@@ -112,6 +133,7 @@ function getUserInfo() {
     $res = $db->query("SHOW TABLE STATUS LIKE 'USERS'");
     $res = $res->fetch_assoc();
     $userId = $res['Auto_increment'];
+    $_SESSION["userId"] = $userId;
 
     $guestName = generateUserName(intval($userId));
 
@@ -122,6 +144,7 @@ function getUserInfo() {
     echo json_encode(array("userType" => "new", "userName" => $guestName));
   } else {
     $res = $res->fetch_assoc();
+    $_SESSION["userId"] = $res["USER_ID"];
     echo json_encode(array("userType" => "return", "userName" => $res["USER_NAME"]));
   }
 
@@ -155,10 +178,18 @@ function generateNewPuzzle() {
     $res = $db->query("SHOW TABLE STATUS LIKE 'PUZZLES'");
     $res = $res->fetch_assoc();
     $_SESSION["mapId"] = $res['Auto_increment'];
-    $res = $db->query("INSERT INTO PUZZLES VALUES(NULL, '$map', ".$solution["bestCount"].", '$sol', 1, 0, 0)");
+    $_SESSION["bestCount"] = $solution["bestCount"]; 
+    $_SESSION["solution"] = $solution["solution"];
+
+    $res = $db->query("INSERT INTO PUZZLES VALUES(NULL, '$map', ".$solution["bestCount"].", '$sol', 0, 0, 0)");
+  } else {
+    $res = $res->fetch_assoc();
+
+    $_SESSION["bestCount"] = $res["BESTCOUNT"]; 
+    $_SESSION["solution"] = decode($res["SOLUTION"]);
   }
   
-  // $_SESSION["startTime"] = microtime(true);
+  $_SESSION["startTime"] = microtime(true);
 
   $return["puzzle"] = $puzzle;
   $return["startPosR"] = $startPosR;
@@ -170,37 +201,35 @@ function generateNewPuzzle() {
 function endGame() {
   global $db;
 
+  if (!isset($_REQUEST["userStep"])) return;
+
   $db = new mysqli(db_host, db_uid, db_pwd, db_name);
-  $map = $_SESSION["map"];
+  $mapId = $_SESSION["mapId"];
+  $userId = $_SESSION["userId"];
   $timeElapse = microtime(true) - $_SESSION["startTime"];
   $userStep = $db->escape_string($_REQUEST["userStep"]);
 
-  $res = $db->query("SELECT * FROM PUZZLE WHERE MAP='" .$map."'");
+  $db->query("INSERT INTO RECORDS VALUES(null, $mapId, $userId, $timeElapse, $userStep)");
+
+  $res = $db->query("SELECT * FROM PUZZLES WHERE PUZZLE_ID=$mapId");
 
   if (!$res || $res->num_rows == 0) {
-    $res = $db->query("INSERT INTO PUZZLE VALUES('".$map."',". $_SESSION["bestCount"]. ", $userStep, $timeElapse)");
+    echo "wrong!";
   } else {
     $row = $res->fetch_assoc();
-    $curUserBestStep = $row["USER_BEST_STEP"];
-    $curUserBestTime = $row["USER_BEST_TIME"];
-
-    if ($userStep < $curUserBestStep) {
-      $res = $db->query("UPDATE PUZZLE SET USER_BEST_STEP=$userStep, USER_BEST_TIME=$timeElapse WHERE MAP='" .$map ."'");
-      if (!$res) {
-        exit("MySQL reports " . $db->error);  
-      }
-    } else
-    if ($userStep < $curUserBestStep && $timeElapse < $curUserBestTime) {
-      $res = $db->query("UPDATE PUZZLE SET USER_BEST_TIME=" .$timeElapse ." WHERE MAP='" .$map ."'");
-      if (!$res) {
-        exit("MySQL reports " . $db->error);  
-      }
-    }
+    $newPlayedTimes = $row["PLAYED_TIMES"] + 1;
+    $newAvgStep = ($row["AVG_STEP"] * $row["PLAYED_TIMES"] + $userStep) / $newPlayedTimes;
+    $newAvgTime = ($row["AVG_TIME"] * $row["PLAYED_TIMES"] + $timeElapse) / $newPlayedTimes;
+    
+    $db->query("UPDATE PUZZLES SET PLAYED_TIMES=$newPlayedTimes, AVG_STEP=$newAvgStep, AVG_TIME=$newAvgTime WHERE PUZZLE_ID=$mapId");
   }
 
   $db->close();
 
-  echo $_SESSION["bestCount"];
+  // $_SESSION["startTime"] = microtime(true);
+
+  echo json_encode(array("bestCount" => $_SESSION["bestCount"],
+                         "timeUsed" => $timeElapse));
 }
 
 // if (isAjax()) {
@@ -215,7 +244,7 @@ function endGame() {
       case "new":
         generateNewPuzzle();
         break;
-      case "bestCount":
+      case "finish":
         endGame();
         break;
       case "solution":

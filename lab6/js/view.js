@@ -185,7 +185,25 @@
     }
   }
 
-  view.congratInfo = function (bestCount, count) {
-    alert('You have completed in ' + count + ' moves!\n' + getScore(bestCount, count));
+  view.congratInfo = function (json, count) {
+    var bestCount = json.bestCount;
+    var timeUsed = json.timeUsed;
+
+    if (timeUsed < 5) {
+      var a = Math.floor((Math.random() * 100) + 1);
+      var b = Math.floor((Math.random() * 100) + 1);
+      var c = a + b;
+
+      var answer = prompt('You are too fast! Please answer:\n' + a + ' + ' + b + ' =');
+
+      if (answer != null) {
+        if (answer != c) {
+          alert('You are not a (intelligent) human!');
+          return;
+        }
+      }
+    }
+
+    alert('You have completed in ' + count + ' moves in ' + timeUsed.toFixed(2) + 's!\n' + getScore(bestCount, count));
   }
 } (window.view = window.view || {}, jQuery));
