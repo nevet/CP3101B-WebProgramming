@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+$session_id = session_id();
+
 require_once("solver.php");
 require_once("../../config.php");
 
@@ -67,6 +69,65 @@ function stringify() {
   }
 
   return $str;
+}
+
+function generateUserName($userId) {
+  $userName = "";
+
+  // echo "user id = ". $userId . "<br>";
+
+  while ($userId > 0) {
+    $cur = (int)$userId % 62;
+    $userId = (int)($userId / 62);
+
+    // echo "cur = $cur, user id = $userId" . "<br>";
+
+    if ($cur < 9) {
+      $userName = $cur . $userName;
+    } else
+    if ($cur >= 10 && $cur < 36) {
+      $userName = chr($cur + 55) . $userName;
+    } else {
+      $userName = chr($cur + 61) . $userName;
+    }
+
+    // echo "user name = $userName " . "<br>";
+  }
+
+  while (strlen($userName) < 5) {
+    $userName = "0" . $userName;
+  }
+
+  return "Guest$userName";
+}
+
+function getUserInfo() {
+  global $db, $session_id;
+
+  $db = new mysqli(db_host, db_uid, db_pwd, db_name);
+  if ($db->connect_errno) // are we connected properly?
+    exit("Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error); 
+
+  $res = $db->query("SELECT * FROM USERS WHERE SESSION_ID='$session_id'");
+
+  if (!$res || $res->num_rows == 0) {
+    $res = $db->query("SHOW TABLE STATUS LIKE 'USERS'");
+    $res = $res->fetch_assoc();
+    $userId = $res['Auto_increment'];
+
+    $guestName = generateUserName(intval($userId));
+
+    // echo $session_id . "<br>";
+
+    $res = $db->query("INSERT INTO USERS VALUES(null, '$session_id', '$guestName')");
+
+    echo json_encode(array("userType" => "new", "userName" => $guestName));
+  } else {
+    $res = $res->fetch_assoc();
+    echo json_encode(array("userType" => "return", "userName" => $res["USER_NAME"]));
+  }
+
+  $db->close();
 }
 
 function generateNewPuzzle() {
@@ -137,12 +198,15 @@ function endGame() {
   echo $_SESSION["bestCount"];
 }
 
-if (isAjax()) {
+// if (isAjax()) {
   // for GET
-  if (isset($_GET["cmd"]) && !empty($_GET["cmd"])) {
-    $command = $_GET["cmd"];
+  if (isset($_REQUEST["cmd"]) && !empty($_REQUEST["cmd"])) {
+    $command = $_REQUEST["cmd"];
 
     switch ($command) {
+      case "user":
+        getUserInfo();
+        break;
       case "new":
         generateNewPuzzle();
         break;
@@ -158,5 +222,5 @@ if (isAjax()) {
         break;
     }
   }
-}
+// }
 ?>
