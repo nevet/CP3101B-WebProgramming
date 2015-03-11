@@ -27,7 +27,7 @@
     inputNewPasswd.val("");
   }
 
-  user.submitProfile = function () {
+  user.submitProfile = function (callback) {
     var data = {'cmd': 'userEdit', 'userId': userId, 'name': inputName.val(), 'oldPass': inputOldPasswd.val(), 'newPass': inputNewPasswd.val()};
     // console.log(data);
     
@@ -37,12 +37,18 @@
         
         alert("Profile updated!");
 
-        return true;
+        callback(true);
       } else {
         alert(response);
 
-        return false;
+        callback(false);
       }
     });
+  }
+
+  user.verify = function (callback) {
+    var answer = prompt('You are too fast! Please enter your password to verify:\n');
+
+    $.post('php/puzzle.php', {'cmd': 'verify', 'userId': userId, 'passwd': answer}, callback);
   }
 } (window.user = window.user || {}, jQuery));

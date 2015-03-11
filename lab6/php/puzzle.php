@@ -197,17 +197,18 @@ function editUserInfo() {
     if ($reqOldPass != $res["USER_PASSWD"]) {
       echo "Old password wrong!";
       return;
-    } else
-    if ($reqName == $res["USER_NAME"]) {
-      echo "Name has been used! Please change a name.";
-      return;
-    } else
-    {
-      $userId = $res["USER_ID"];
-      // echo "UPDATE USERS SET USER_NAME='$reqName', USER_PASSWD='$reqNewPass' WHERE USER_ID=$userId";
-      $db->query("UPDATE USERS SET USER_NAME='$reqName', USER_PASSWD='$reqNewPass' WHERE USER_ID=$userId");
+    } else {
+      $res = $db->query("SELECT * FROM USERS WHERE USER_NAME='$reqName' AND USER_ID!=$reqUserId");
 
-      echo "ok";
+      if (!$res || $res->num_rows == 0) {
+        $userId = $reqUserId;
+        // echo "UPDATE USERS SET USER_NAME='$reqName', USER_PASSWD='$reqNewPass' WHERE USER_ID=$userId";
+        $db->query("UPDATE USERS SET USER_NAME='$reqName', USER_PASSWD='$reqNewPass' WHERE USER_ID=$userId");
+
+        echo "ok";
+      } else {
+        echo "Name has already been used, please change another name.";
+      }
     }
   }
 }

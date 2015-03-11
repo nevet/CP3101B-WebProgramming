@@ -44,17 +44,11 @@
     });
 
     $('#profileSubmit').on("click", function () {
-      var success;
-
-      $.when(
-        success = user.submitProfile()
-      ).then(function () {
-        if (success) {
+      user.submitProfile(function (res) {
+        if (res) {
           view.hideProfileDiv();
           view.hideCover();
         }
-      }).fail(function () {
-        alert("Profile update failed, please contact admin for help.");
       });
     });
 
@@ -84,14 +78,10 @@
 
     $('html').on('gameFinished', function (event, stepCount) {
       $.get('php/puzzle.php', {'cmd': 'finish', 'userStep': stepCount}, function (data) {
-        var res;
-
         if (data == "verifyRequest") {
-          var answer = prompt('You are too fast! Please enter your password to verify:\n');
-
-          $.post('php/puzzle.php', {'cmd': 'verify', 'userId': userId, 'passwd': answer}, function (res) {
+          user.verify(function (res) {
             if (res != "ok") {
-              alert("Invalid submission!");
+              alert('You are not authorized!');
             } else {
               $.get('php/puzzle.php', {'cmd': 'confirmFinish'}, function (data) {
                 view.congratInfo(JSON.parse(data), stepCount);
