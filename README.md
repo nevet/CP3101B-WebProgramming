@@ -31,3 +31,11 @@ I installed `XAMPP` as my localhost. It's an open source (free) and easy-to-use 
 ## Lab 5
 
 This lab talks about `DataBase`. The lab requires to make the puzzle interface in Lab 4 interacts with a MySQL database. The database should record the best step count and the best solving time for each map. For my application, this requirement is a bit meaningless, since my graph instance are all auto-generated, so it's very unlikely to get an identical graph. The live demo is [here](http://cp3101b.comp.nus.edu.sg/~huangda/lab5).
+
+**Note**
+
+The live demo of this lab may not work any more, since the backend database design has been changed to adapt labter labs.
+
+## Lab 6
+
+This lab talks about security, however my lab doesn't seem to be secure at all lol. However, in this lab, I added a user system to the game, also provide online game status to all of the online players. In later development, I also plan to allow "challendge mode", i.e. user could not only view the online game status, but challenge them by clicking on the record. Thie live demo is [here](http://cp3101b.comp.nus.edu.sg/~huangda/lab6).
