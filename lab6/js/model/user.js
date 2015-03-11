@@ -36,25 +36,13 @@
         userName = data.name;
         
         alert("Profile updated!");
-        
+
         return true;
       } else {
         alert(response);
 
         return false;
       }
-    });
-
-    return true;
-  }
-
-  user.verify = function () {
-    var dfd = $.Deferred();
-
-    var answer = prompt('You are too fast! Please enter your password to verify:\n');
-
-    $.post('php/puzzle.php', {'cmd': 'verify', 'userId': userId, 'passwd': answer}, function (res) {
-      dfd.resolve(res);
     });
   }
 } (window.user = window.user || {}, jQuery));

@@ -84,7 +84,23 @@
 
     $('html').on('gameFinished', function (event, stepCount) {
       $.get('php/puzzle.php', {'cmd': 'finish', 'userStep': stepCount}, function (data) {
-        view.congratInfo(JSON.parse(data), stepCount);
+        var res;
+
+        if (data == "verifyRequest") {
+          var answer = prompt('You are too fast! Please enter your password to verify:\n');
+
+          $.post('php/puzzle.php', {'cmd': 'verify', 'userId': userId, 'passwd': answer}, function (res) {
+            if (res != "ok") {
+              alert("Invalid submission!");
+            } else {
+              $.get('php/puzzle.php', {'cmd': 'confirmFinish'}, function (data) {
+                view.congratInfo(JSON.parse(data), stepCount);
+              });
+            }
+          });
+        } else {
+          view.congratInfo(JSON.parse(data), stepCount);
+        }
       }).done(function () {
         init(false);
       });

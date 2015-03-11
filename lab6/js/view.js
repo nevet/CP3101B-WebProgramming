@@ -225,19 +225,6 @@
     var bestCount = json.bestCount;
     var timeUsed = json.timeUsed;
 
-    if (timeUsed < 5) {
-      var res;
-
-      $.when(
-        res = user.verify()
-      ).then(function () {
-        if (res != "ok") {
-          alert('You are not authorized!');
-          return;
-        }
-      });
-    }
-
     alert('You have completed in ' + count + ' moves in ' + timeUsed.toFixed(2) + 's!\n' + getScore(bestCount, count));
   }
 } (window.view = window.view || {}, jQuery));

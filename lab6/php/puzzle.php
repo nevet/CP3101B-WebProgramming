@@ -227,7 +227,7 @@ function verifyUserInfo() {
   $reqUserId = $db->escape_string($_REQUEST["userId"]);
   $reqPasswd = $db->escape_string($_REQUEST["passwd"]);
 
-  if ($reqOldPass == "") $reqOldPass = NULL;
+  if ($reqPasswd == "") $reqPasswd = NULL;
 
   $res = $db->query("SELECT * FROM USERS WHERE USER_ID=$reqUserId");
 
@@ -292,16 +292,17 @@ function generateNewPuzzle() {
   echo json_encode($return);
 }
 
-function endGame() {
-  global $db;
-
-  if (!isset($_REQUEST["userStep"])) return;
+function updateRecord() {
+  if (empty($_SESSION["tempElapseTime"]) || empty($_SESSION["tempStep"])) {
+    echo "Invalid operation!";
+    return;
+  }
 
   $db = new mysqli(db_host, db_uid, db_pwd, db_name);
+  $timeElapse = $_SESSION["tempElapseTime"];
   $mapId = $_SESSION["mapId"];
   $userId = $_SESSION["userId"];
-  $timeElapse = microtime(true) - $_SESSION["startTime"];
-  $userStep = $db->escape_string($_REQUEST["userStep"]);
+  $userStep = $db->escape_string($_SESSION["tempStep"]);
 
   $db->query("INSERT INTO RECORDS VALUES(null, $mapId, $userId, $timeElapse, $userStep)");
 
@@ -324,6 +325,28 @@ function endGame() {
 
   echo json_encode(array("bestCount" => $_SESSION["bestCount"],
                          "timeUsed" => $timeElapse));
+}
+
+function endGame() {
+  global $db;
+
+  if (!isset($_REQUEST["userStep"])) return;
+
+  $timeElapse = microtime(true) - $_SESSION["startTime"];
+
+  $_SESSION["tempElapseTime"] = $timeElapse;
+  $_SESSION["tempStep"] = $_REQUEST["userStep"];
+
+  if ($timeElapse < 5) {
+    echo "verifyRequest";
+
+    return;
+  }
+
+  updateRecord();
+
+  $_SESSION["tempElapseTime"] = NULL;
+  $_SESSION["tempStep"] = NULL;
 }
 
 // if (isAjax()) {
@@ -349,6 +372,9 @@ function endGame() {
         break;
       case "finish":
         endGame();
+        break;
+      case "confirmFinish":
+        updateRecord();
         break;
       case "solution":
         echo json_encode(array("bestCount" => $_SESSION["bestCount"],
