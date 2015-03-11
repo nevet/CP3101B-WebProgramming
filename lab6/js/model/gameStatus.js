@@ -17,8 +17,8 @@
 
       for (var i = 0; i < json.length; i ++) {
         var row = json[i];
-        console.log(row);
-        content.append('<tr><td>'+row["PUZZLE_ID"]+'</td><td>'+row["USER_NAME"]
+
+        content.append('<tr><td><a href=#>'+row["PUZZLE_ID"]+'</a></td><td>'+row["USER_NAME"]
                        +'</td><td>'+row["STEP"]+'</td><td>'+row["TIME"]+'</td></tr>');
       }
     });
