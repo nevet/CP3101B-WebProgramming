@@ -57,13 +57,13 @@
       var row = gameStatus.latestRecord[i];
 
       if (row["PUZZLE_ID"] == puzzleId) {
-        // if (row["USER_NAME"] == userName) {
-        //   alert("You cannot compete with yourself!");
-        //   break;
-        // } else {
+        if (row["USER_NAME"] == userName) {
+          alert("You cannot compete with yourself!");
+          break;
+        } else {
           $.get("php/puzzle.php", {"cmd": "compete", "puzzleId": puzzleId}, callback);
           break;
-        // }
+        }
       }
     }
   }
