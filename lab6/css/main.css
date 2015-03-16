@@ -57,8 +57,6 @@ box-shadow: 0 0 1px rgba(0,0,0, .75);
 }
 
 .container {
-	width: 1200px;
-	min-height: 685px;
 	margin: auto;
 }
 
@@ -168,6 +166,12 @@ box-shadow: 0 0 1px rgba(0,0,0, .75);
 #count {
 	position: absolute;
 	left: 10px;
+}
+
+#competeStatus {
+	margin: auto;
+	color: red;
+	visibility: hidden;
 }
 
 #hint {

@@ -51,4 +51,20 @@
 
     $.post('php/puzzle.php', {'cmd': 'verify', 'userId': userId, 'passwd': answer}, callback);
   }
+
+  user.compete = function (puzzleId, callback) {
+    for (var i = 0; i < gameStatus.latestRecord.length; i ++) {
+      var row = gameStatus.latestRecord[i];
+
+      if (row["PUZZLE_ID"] == puzzleId) {
+        // if (row["USER_NAME"] == userName) {
+        //   alert("You cannot compete with yourself!");
+        //   break;
+        // } else {
+          $.get("php/puzzle.php", {"cmd": "compete", "puzzleId": puzzleId}, callback);
+          break;
+        // }
+      }
+    }
+  }
 } (window.user = window.user || {}, jQuery));

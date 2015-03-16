@@ -6,8 +6,6 @@
   graph.startPosC = -1;
 
   graph.init = function (ajaxData) {
-    graph.bestCount = -1;
-
     for (var i = 0; i < 5; i ++)
       for (var j = 0; j < 5; j ++)
         graph.map[i][j] = ajaxData.puzzle[i][j];

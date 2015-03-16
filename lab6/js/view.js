@@ -192,6 +192,18 @@
     });
   }
 
+  view.showCompeteStatus = function () {
+    $('#competeStatus').css({
+      "visibility": 'visible'
+    });
+  }
+
+  view.hideCompeteStatus = function () {
+    $('#competeStatus').css({
+      "visibility": 'hidden'
+    });
+  }
+
   view.resetPath = function () {
     view.renderMap();
   }
@@ -224,7 +236,15 @@
   view.congratInfo = function (json, count) {
     var bestCount = json.bestCount;
     var timeUsed = json.timeUsed;
+    var message = 'You have completed in ' + count + ' moves in ' + timeUsed.toFixed(2) + 's!\n';
+    var inBattle = $('#competeStatus').css('visibility') == 'visible';
 
-    alert('You have completed in ' + count + ' moves in ' + timeUsed.toFixed(2) + 's!\n' + getScore(bestCount, count));
+    if (inBattle) {
+      message += json.competeResult;
+    } else {
+      message += getScore(parseInt(bestCount), count);
+    }
+
+    alert(message);
   }
 } (window.view = window.view || {}, jQuery));

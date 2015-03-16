@@ -246,6 +246,49 @@ function verifyUserInfo() {
   }
 }
 
+function findStartPos($map) {
+  for ($i = 0; $i < 5; $i ++) {
+    for ($j = 0; $j < 5; $j ++) {
+      if ($map[$i * 5 + $j] == '0') return array("R" => $i, "C" => $j);
+    }
+  }
+}
+
+function compete() {
+  global $db;
+
+  if (!isset($_REQUEST["puzzleId"])) {
+    echo "Invalid operation! Please contact admin for help.";
+    return;
+  }
+
+  $db = new mysqli(db_host, db_uid, db_pwd, db_name);
+  if ($db->connect_errno) // are we connected properly?
+    exit("Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error); 
+
+  $puzzleId = $db->escape_string($_REQUEST["puzzleId"]);
+
+  $res = $db->query("SELECT * FROM PUZZLES WHERE PUZZLE_ID=$puzzleId");
+
+  if (!$res || $res->num_rows == 0) {
+    echo "invalid";
+  } else {
+    $res = $res->fetch_assoc();
+
+    $_SESSION["bestCount"] = $res["BESTCOUNT"]; 
+    $_SESSION["solution"] = decode($res["SOLUTION"]);
+    $_SESSION["mapId"] = $puzzleId;
+    $_SESSION["startTime"] = microtime(true);
+
+    $return["puzzle"] = decode($res["MAP"]);
+    $startPos = findStartPos($res["MAP"]);
+    $return["startPosR"] = $startPos["R"];
+    $return["startPosC"] = $startPos["C"];
+
+    echo json_encode($return);
+  }
+}
+
 function generateNewPuzzle() {
   global $puzzle, $startPosR, $startPosC, $db;
 
@@ -276,10 +319,11 @@ function generateNewPuzzle() {
     $_SESSION["bestCount"] = $solution["bestCount"]; 
     $_SESSION["solution"] = $solution["solution"];
 
-    $res = $db->query("INSERT INTO PUZZLES VALUES(NULL, '$map', ".$solution["bestCount"].", '$sol', 0, 0, 0)");
+    $res = $db->query("INSERT INTO PUZZLES VALUES(NULL, '$map', ".$solution["bestCount"].", '$sol', 30, 1e9, 0, 0, 0)");
   } else {
     $res = $res->fetch_assoc();
 
+    $_SESSION["mapId"] = $res["PUZZLE_ID"];
     $_SESSION["bestCount"] = $res["BESTCOUNT"]; 
     $_SESSION["solution"] = decode($res["SOLUTION"]);
   }
@@ -308,16 +352,23 @@ function updateRecord() {
   $db->query("INSERT INTO RECORDS VALUES(null, $mapId, $userId, $timeElapse, $userStep)");
 
   $res = $db->query("SELECT * FROM PUZZLES WHERE PUZZLE_ID=$mapId");
+  $competeResult = "You lose!";
 
   if (!$res || $res->num_rows == 0) {
-    echo "wrong!";
+    echo "update record wrong! no map $mapId!";
   } else {
     $row = $res->fetch_assoc();
     $newPlayedTimes = $row["PLAYED_TIMES"] + 1;
     $newAvgStep = ($row["AVG_STEP"] * $row["PLAYED_TIMES"] + $userStep) / $newPlayedTimes;
     $newAvgTime = ($row["AVG_TIME"] * $row["PLAYED_TIMES"] + $timeElapse) / $newPlayedTimes;
+    $competeResult .= " The best result is ".$row["USER_BESTCOUNT"]." moves at ".number_format((float)$row["USER_BESTTIME"], 2, '.', '')."s.";
     
     $db->query("UPDATE PUZZLES SET PLAYED_TIMES=$newPlayedTimes, AVG_STEP=$newAvgStep, AVG_TIME=$newAvgTime WHERE PUZZLE_ID=$mapId");
+
+    if ($userStep < $row["USER_BESTCOUNT"] || $timeElapse < $row["USER_BESTTIME"]) {
+      $db->query("UPDATE PUZZLES SET USER_BESTCOUNT=$userStep, USER_BESTTIME=$timeElapse WHERE PUZZLE_ID=$mapId");
+      $competeResult = "You win!";
+    }
   }
 
   $db->close();
@@ -325,7 +376,8 @@ function updateRecord() {
   // $_SESSION["startTime"] = microtime(true);
 
   echo json_encode(array("bestCount" => $_SESSION["bestCount"],
-                         "timeUsed" => $timeElapse));
+                         "timeUsed" => $timeElapse,
+                         "competeResult" => $competeResult));
 }
 
 function endGame() {
@@ -368,6 +420,9 @@ function endGame() {
       case "record":
         getRecord();
         break;
+      case "compete":
+        compete();
+        break;
       case "new":
         generateNewPuzzle();
         break;
@@ -382,7 +437,7 @@ function endGame() {
                                "solution" => $_SESSION["solution"]));
         break;
       default:
-        echo "wrong";
+        echo "command wrong";
         break;
     }
   }

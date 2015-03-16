@@ -37,6 +37,21 @@
       view.showGameStatusDiv();
     });
 
+    $(document).on("click", '.puzzleIdLink', function () {
+      user.compete($(this).html(), function (data) {
+        if (data == "invalid") {
+          alert("The request is rejected!");
+        } else {
+          view.hideGameStatusDiv();
+          view.hideCover();
+          view.showCompeteStatus();
+
+          graph.init(JSON.parse(data));
+          path.init();
+        }
+      });
+    });
+
     $('#profile').on("click", function () {
       user.populateProfile();
       view.showCover();
@@ -77,6 +92,8 @@
     });
 
     $('html').on('gameFinished', function (event, stepCount) {
+      var handled = false;
+
       $.get('php/puzzle.php', {'cmd': 'finish', 'userStep': stepCount}, function (data) {
         if (data == "verifyRequest") {
           user.verify(function (res) {
@@ -85,14 +102,17 @@
             } else {
               $.get('php/puzzle.php', {'cmd': 'confirmFinish'}, function (data) {
                 view.congratInfo(JSON.parse(data), stepCount);
+              }).done(function () {
+                view.hideCompeteStatus();
+                init(false);
               });
             }
           });
         } else {
           view.congratInfo(JSON.parse(data), stepCount);
+          view.hideCompeteStatus();
+          init(false);
         }
-      }).done(function () {
-        init(false);
       });
     });
 
