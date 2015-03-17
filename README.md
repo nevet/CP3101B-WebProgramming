@@ -39,3 +39,13 @@ The live demo of this lab may not work any more, since the backend database desi
 ## Lab 6
 
 This lab talks about security, however my lab doesn't seem to be secure at all lol. However, in this lab, I added a user system to the game, also provide online game status to all of the online players. In later development, I also plan to allow "challendge mode", i.e. user could not only view the online game status, but challenge them by clicking on the record. Thie live demo is [here](http://cp3101b.comp.nus.edu.sg/~huangda/lab6).
+
+**Update**
+
+The challenge mode has been added.
+
+## Lab 7
+
+This lab talks about responsive design. The major goal for this lab is to make the design responsive to the viewport width's change. I made use of ```Bootstrap``` to do the UI, none trick involved, simply copy paste some demo code from Bootstrap's official demo site. The live demo is [here](http://cp3101b.comp.nus.edu.sg/~huangda/lab7).
+
+**Note** You could use your mobile to access the demo to feel the responsive design :)
