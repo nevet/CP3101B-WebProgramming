@@ -32,6 +32,7 @@
     init(true);
 
     $('#gameStatus').on("click", function () {
+      view.hideProfileDiv();
       gameStatus.refresh();
       view.showCover();
       view.showGameStatusDiv();
@@ -53,6 +54,7 @@
     });
 
     $('#profile').on("click", function () {
+      view.hideGameStatusDiv();
       user.populateProfile();
       view.showCover();
       view.showProfileDiv();
