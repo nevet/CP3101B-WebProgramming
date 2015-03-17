@@ -192,10 +192,6 @@
         'opacity': 0
       });
 
-      $('body').css({
-        'height': $( window ).height()
-      });
-
       $(this).removeClass('ani-fadeOut');
     });
   }
