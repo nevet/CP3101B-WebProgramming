@@ -2,11 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="shortcut icon" type="image/png" href="img/standing-cat.png">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <script src="../js/bootstrap.min.js"></script>
     <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
     <title>The Runaway Cat - Puzzle</title>
   </head>
   <body>
@@ -44,28 +45,41 @@
     </div>
     <div id="cover">
     </div>
-    <div class="container">
-      <div class="banner round-border">
-        <div id="icon"></div>
-        <span class="banner-text" id="title">Runaway Cat Puzzle</span>
-        <span class="banner-text" id="subtitle">Can you beat it?</span>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="banner round-border col-xs-12 col-md-6 col-md-offset-3">
+          <div id="icon"></div>
+          <span class="banner-text hidden-xs" id="title">Runaway Cat Puzzle</span>
+        </div>
       </div>
-      <div class="panel">
-        <canvas class="playground" id="play-table" width="480px" height="480px">
-        </canvas>
-        <div class="hintpanel">
-        <canvas class="playground" id="hint-table" width="480px" height="480px">
-        </canvas>
+      <div class="playpanel row">
+        <div class="col-xs-12 col-md-4 col-md-offset-4">
+          <canvas class="playground" id="play-table" width="480px" height="480px">
+          </canvas>
+          <div class="hintpanel">
+            <canvas class="playground" id="hint-table" width="480px" height="480px">
+            </canvas>
+          </div>
+        </div>
       </div>
-        <div class="control-panel">
-          <div  id="instruction">
+      <div class="row">
+        <div class="col-md-4 col-xs-12 col-md-offset-4">
+          <div id="instruction">
             <span>Start from <span id="indicator">H</span>ome :) </span>
           </div>
-          <div>
-            <span id="count">Count: <span id="step-count">0</span></span>
-            <span id="competeStatus">In Battle!</span>
-            <span id="hint">Hint</span></span>
-          </div>
+        </div>
+      </div>
+      <div class="row control-panel">
+        <div class="col-md-2 col-md-offset-2 col-xs-4">
+          <div id="count"><span>Count: <span id="step-count">0</span></span></div>
+        </div>
+        <div class="col-md-2 col-md-offset-1 col-xs-4">
+          <div id="competeStatus"><span>In Battle!</span></div>
+        </div>
+        <div class="col-md-2 col-md-offset-1 col-xs-4">
+          <button type="button" class="btn btn-default btn-sm" id="hint">
+            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>&nbsp;&nbsp;Hint
+          </button>
         </div>
       </div>
     </div>

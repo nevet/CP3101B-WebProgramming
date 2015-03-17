@@ -164,15 +164,19 @@
 
   view.showSolution = function () {
     $('.hintpanel').css({
-      'z-index': 10
+      'z-index': 10,
+      'width': $('#play-table').width()
     });
+
+    console.log($('#play-table').width());
 
     $('.hintpanel').addClass('ani-fadeIn');
 
     $('.hintpanel').on("webkitAnimationEnd oanimationend msAnimationEnd animationend", function (e) {
       $('.hintpanel').css({
         'opacity': 1,
-        'z-index': 10
+        'z-index': 10,
+        'width': $('#play-table').width()
       });
 
       $(this).removeClass('ani-fadeIn');
@@ -186,6 +190,10 @@
       $('.hintpanel').css({
         'z-index': -1,
         'opacity': 0
+      });
+
+      $('body').css({
+        'height': $( window ).height()
       });
 
       $(this).removeClass('ani-fadeOut');
