@@ -1,7 +1,6 @@
 (function (gameStatus, $, undefined) {
   var tableContainer = $('#tableContainer');
-  var table = $('#gameStatusTable');
-  var content = $('.scrollContent');
+  var content = $('.content');
 
   gameStatus.latestRecord;
 
