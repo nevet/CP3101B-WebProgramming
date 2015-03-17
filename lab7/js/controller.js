@@ -73,12 +73,16 @@
       view.hideCover();
     });
 
-    $('#hint').hover(function () {
-      $.get('php/puzzle.php', {'cmd': 'solution'}, function (data) {
-        view.renderSolution(JSON.parse(data));
-        view.showSolution();
-      });
-    }, view.hideSolution);
+    $('#hint').on("click", function () {
+      if ($('.hintpanel').css('opacity') == 0) {
+        $.get('php/puzzle.php', {'cmd': 'solution'}, function (data) {
+          view.renderSolution(JSON.parse(data));
+          view.showSolution();
+        });
+      } else {
+        view.hideSolution();
+      }
+    });
 
     $('#play-table').mousemove(function () {
       var cell = getCellUnderMouse(event);

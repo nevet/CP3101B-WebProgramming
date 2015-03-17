@@ -282,6 +282,8 @@ tbody.scrollContent tr.alternateRow td {
 	position:fixed;
 	width:200px;
 	padding:10px;
+	right: 10px;
+	z-index: 15;
 }
 
 ul#navigation {
