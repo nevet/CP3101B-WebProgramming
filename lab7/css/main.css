@@ -33,31 +33,7 @@ div {
 }
 
 .submitButton {
-	cursor: pointer;
-	padding:5px 25px; /*add some padding to the inside of the button*/
-	background:#D08C0E; /*the colour of the button*/
-	border:1px solid #836021; /*required or the default border for the browser will appear*/
-	/*give the button curved corners, alter the size as required*/
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	border-radius: 10px;
-	/*give the button a drop shadow*/
-	-webkit-box-shadow: 0 0 4px rgba(0,0,0, .75);
-	-moz-box-shadow: 0 0 4px rgba(0,0,0, .75);
-	box-shadow: 0 0 4px rgba(0,0,0, .75);
-	/*style the text*/
-	color:#f3f3f3;
-	font-size: 23px;
-	position: relative;
-	left: 26px;
-}
-
-.submitButton:hover, .submitButton:focus{
-background-color :#987B31; /*make the background a little darker*/
-/*reduce the drop shadow size to give a pushed button effect*/
--webkit-box-shadow: 0 0 1px rgba(0,0,0, .75);
--moz-box-shadow: 0 0 1px rgba(0,0,0, .75);
-box-shadow: 0 0 1px rgba(0,0,0, .75);
+	text-align: center;
 }
 
 .container {
@@ -190,13 +166,8 @@ box-shadow: 0 0 1px rgba(0,0,0, .75);
 
 #profileDiv {
 	position: fixed;
-	width: 200px;
 	top: 20%;
-	left: 45%;
-	font-size: 30px;
-	color: orange;
 	z-index: 2;
-	text-shadow: 3px 3px 7px #A09C75;
 	visibility: hidden;
 }
 

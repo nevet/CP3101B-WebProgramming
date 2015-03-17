@@ -1,9 +1,9 @@
 (function (user, $, undefined) {
   var userName;
   var userId;
-  var inputName = $('input[name=userName]');
-  var inputOldPasswd = $('input[name=oldPasswd]');
-  var inputNewPasswd = $('input[name=newPasswd]');
+  var inputName = $('input[placeholder=Username]');
+  var inputOldPasswd = $('input[placeholder=Oldpasswd]');
+  var inputNewPasswd = $('input[placeholder=Newpasswd]');
 
   user.init = function () {
     $.post('php/puzzle.php', {'cmd': 'user'}, function (data) {
