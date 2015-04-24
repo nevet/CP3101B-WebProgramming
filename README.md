@@ -4,6 +4,11 @@ This repo tracks the progress of my CP3101B, i.e. Web Programming, learning proc
 
 The course consists of 7 labs on different toics + a term project. I will host all labs in this repo, and the term project in a separate repo.
 
+## Term Project
+We are hosting our term project [here](https://github.com/nevet/datagopro), and here is the [live address](datagopro.com).
+
+The project is a random data set generator for algorithmic problems. Usually we test our code aginst some random generated data before we submit the code, but generating a random data set sometimes is not a trivial task. DataGoPro aims to provide a sophisticated data generation scheme to help every coder to generate suitable and abundant random input for specific problems.
+
 ## Lab 1
 
 This lab talks about basic `HTML5`, `CSS3` and some simple `JavaScript`. The lab requires to use multiple `HTML5` tags, and some `CSS` styling. Beyond the requirement, I also added some simple `CSS3` animations and transformation. The live demo is [here](http://cp3101b.comp.nus.edu.sg/~huangda/lab1).
